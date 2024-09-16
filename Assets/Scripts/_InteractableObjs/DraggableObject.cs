@@ -17,7 +17,10 @@ public class DraggableObject : MonoBehaviour, IPointerDownHandler, IBeginDragHan
 
     public virtual void OnPointerDown(PointerEventData eventData) { }
 
-    public virtual void OnBeginDrag(PointerEventData eventData) { }
+    public virtual void OnBeginDrag(PointerEventData eventData)
+    {
+        rectTransform.position = Input.mousePosition;
+    }
 
     public virtual void OnEndDrag(PointerEventData eventData) { }
 

@@ -38,7 +38,7 @@ public class GemObj : DraggableObject
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0.9f;
         
-        var results = Physics2D.OverlapCircleAll(transform.position, 15);
+        var results = Physics2D.OverlapCircleAll(transform.position, 10);
         for (var i  = 0; i < results.Length; i++) if (results[i].gameObject == gameObject) results = results.Where((val, idx) => idx != i).ToArray();
         if (results.Length > 0)
         {
@@ -60,6 +60,8 @@ public class GemObj : DraggableObject
                 }
             }
         }
+        
+        base.OnBeginDrag(eventData);
     }
     
     public override async void OnEndDrag(PointerEventData eventData)
@@ -69,7 +71,7 @@ public class GemObj : DraggableObject
         canvasGroup.alpha = 1f;
 
         var badTouch = false;
-        var results = Physics2D.OverlapCircleAll(transform.position, 15);
+        var results = Physics2D.OverlapCircleAll(transform.position, 10);
         for (var i  = 0; i < results.Length; i++) if (results[i].gameObject == gameObject) results = results.Where((val, idx) => idx != i).ToArray();
         if (results.Length > 0)
         {

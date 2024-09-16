@@ -39,7 +39,7 @@ public class GemScreen : BaseScreen
             gObj.tag = "Gem";
             gObj.AddComponent<RectTransform>();
             gObj.AddComponent<CanvasGroup>();
-            gObj.AddComponent<CircleCollider2D>().radius = 35f;
+            gObj.AddComponent<CircleCollider2D>().radius = 40;
 
             for (var i = 0; i < 5; i++)
             {

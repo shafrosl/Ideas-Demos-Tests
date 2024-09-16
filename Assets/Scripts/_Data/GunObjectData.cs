@@ -164,7 +164,7 @@ public class GunObjectData : ItemObjectData
             slotI.preserveAspect = true;
             slotI.rectTransform.SetWidth(70);
             slotI.rectTransform.SetHeight(70);
-            slot.AddComponent<CircleCollider2D>().radius = 20;
+            slot.AddComponent<CircleCollider2D>().radius = 10;
             slot.AddComponent<GunGemSlot>();
             slot.tag = "Slot";
         }
