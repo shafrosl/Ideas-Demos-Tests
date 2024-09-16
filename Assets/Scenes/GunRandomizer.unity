@@ -445,6 +445,9 @@ MonoBehaviour:
   Sprites: {fileID: 1932287810}
   isHidden: 0
   isHiding: 0
+  isShooting: 0
+  isReloading: 0
+  isReloaded: 0
   range:
     Min: -7.3918743
     Max: 9.750982
