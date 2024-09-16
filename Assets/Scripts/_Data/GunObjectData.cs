@@ -13,7 +13,6 @@ public class GunObjectData : ItemObjectData
 {
     public Vector2 GunAnchor = new Vector2(-120, 90);
     public Sprite SlotIcon;
-    public Sprite xIcon;
     [SerializeField] public List<BodyObject> Bodies = new();
     [SerializeField] public List<BarrelObject> Barrels = new();
     [SerializeField] public List<StockObject> Stocks = new();
