@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f8aa6a223642eea85402e835cefbdd, type: 3}
+  m_Name: GunData
+  m_EditorClassIdentifier: 
+  GunAnchor: {x: -100, y: 80}
+  SlotIcon: {fileID: 21300000, guid: 1e6a43c15109340dc95ae4306c39a36d, type: 3}
+  xIcon: {fileID: -933248005, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
+  Bodies:
+  - ID: 0
+    Icon: {fileID: -317220101, guid: 6eb2a6519ee9f41cca68b557965e7c99, type: 3}
+    Name: Pistol Body
+    GunPart: 0
+    GemSlotPosition: {x: 108, y: 37, z: 0}
+    Stats:
+    - Modifier: 3
+      Value: 20
+    - Modifier: 7
+      Value: 12
+  - ID: 1
+    Icon: {fileID: 287642978, guid: 8f83a7564c1424d15838a8c054228a1a, type: 3}
+    Name: Revolver Body
+    GunPart: 0
+    GemSlotPosition: {x: 10, y: 61, z: 0}
+    Stats:
+    - Modifier: 8
+      Value: 17
+    - Modifier: 6
+      Value: 5
+  Barrels:
+  - ID: 0
+    Icon: {fileID: -470077604, guid: 8f83a7564c1424d15838a8c054228a1a, type: 3}
+    Name: Revolver Barrel
+    GunPart: 2
+    GemSlotPosition: {x: -4, y: 0, z: 0}
+    Stats:
+    - Modifier: 3
+      Value: -10
+    - Modifier: 2
+      Value: 10
+    Connectors:
+      Points:
+      - {x: 291, y: 53, z: 0}
+      - {x: 209, y: 85, z: 0}
+  - ID: 1
+    Icon: {fileID: -1071306448, guid: 6eb2a6519ee9f41cca68b557965e7c99, type: 3}
+    Name: Pistol Barrel
+    GunPart: 2
+    GemSlotPosition: {x: 20, y: 0, z: 0}
+    Stats:
+    - Modifier: 8
+      Value: -12
+    - Modifier: 3
+      Value: 10
+    Connectors:
+      Points:
+      - {x: 380, y: 54, z: 0}
+      - {x: 295, y: 85, z: 0}
+  Stocks:
+  - ID: 0
+    Icon: {fileID: 528474997, guid: 6eb2a6519ee9f41cca68b557965e7c99, type: 3}
+    Name: Pistol Stock
+    GunPart: 1
+    GemSlotPosition: {x: 10, y: 10, z: 0}
+    Stats:
+    - Modifier: 8
+      Value: 7
+    - Modifier: 3
+      Value: 20
+    Connectors:
+      Points:
+      - {x: -155, y: -126, z: 0}
+      - {x: -120, y: -114, z: 0}
+  - ID: 1
+    Icon: {fileID: 947611074, guid: 8f83a7564c1424d15838a8c054228a1a, type: 3}
+    Name: Revolver Stock
+    GunPart: 1
+    GemSlotPosition: {x: -31, y: -47, z: 0}
+    Stats:
+    - Modifier: 4
+      Value: 10
+    - Modifier: 10
+      Value: 5
+    Connectors:
+      Points:
+      - {x: -155, y: -100, z: 0}
+      - {x: -137, y: -107, z: 0}
