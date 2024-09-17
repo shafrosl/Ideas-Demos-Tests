@@ -7,6 +7,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [Header("Cameras")]
+    public Camera UICamera;
+    public Camera GameCamera;
+    
+    [Header("Data")]
     public GunObjectData GunData;
     public GemObjectData GemData;
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
@@ -15,7 +20,7 @@ public class GameManager : MonoBehaviour
     public BodyObject currBodyObj;
     public BarrelObject currBarrelObj;
     public StockObject currStockObj;
-    
+
     public bool IsReady => Instance && GunData && GemData;
     
     private void Awake()

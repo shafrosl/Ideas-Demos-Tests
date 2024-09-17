@@ -2,10 +2,12 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
 using UnityEngine;
+using Debug = Utility.Debug;
 
 public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform Sprites;
+    public Transform BulletExit;
     
     [Header("Player State")] 
     public bool isHidden;
@@ -19,7 +21,11 @@ public class Player : MonoBehaviour, IMovement, IGun
     public float speedH = 2.0f;
     public float speedV = 2.0f;
     private float yaw, pitch;
-    
+
+    [Header("Timers")] 
+    private float internalCooldownTimer;
+    public float cooldownTimer;
+
     private void Update()
     {
         Look();
@@ -66,6 +72,27 @@ public class Player : MonoBehaviour, IMovement, IGun
     public void OnShoot()
     {
         if (Input.GetMouseButtonDown(0)) isShooting = true;
+        if (internalCooldownTimer > 0)
+        {
+            internalCooldownTimer -= Time.deltaTime;
+        }
+        else
+        {
+            if (isShooting)
+            {
+                internalCooldownTimer = cooldownTimer;
+                Ray ray = new Ray(BulletExit.position, GameManager.Instance.GameCamera.transform.forward);
+                var hit = Physics2D.GetRayIntersection(ray);
+                if (hit.collider is null) return;
+                if (hit.collider.CompareTag("Target"))
+                {
+                    if (hit.transform.TryGetComponent(out Target target))
+                    {
+                        target.InstantiateHole(target.transform.InverseTransformPoint(hit.point));
+                    }
+                }
+            }
+        }
         if (Input.GetMouseButtonUp(0)) isShooting = false;
     }
 
@@ -80,5 +107,10 @@ public class Player : MonoBehaviour, IMovement, IGun
         {
             
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Debug.DrawLine(BulletExit.position, GameManager.Instance.GameCamera.transform.forward, 100, Color.red);
     }
 }

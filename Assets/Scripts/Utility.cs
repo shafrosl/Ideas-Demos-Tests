@@ -114,7 +114,7 @@ namespace Utility
     public static class Convert
     {
         public static float ToFloat(this int value, int divisible = 1) => ((float)value) / divisible;
-        
+
         public static string AddSpace(this string internalName)
         {
             if (string.IsNullOrWhiteSpace(internalName))
@@ -127,7 +127,17 @@ namespace Utility
                     newText.Append(' ');
                 newText.Append(internalName[i]);
             }
+
             return newText.ToString();
+        }
+
+        public static Mesh SpriteToMesh(this Sprite sprite)
+        {
+            var mesh = new Mesh();
+            mesh.SetVertices(Array.ConvertAll(sprite.vertices, i => (Vector3)i).ToList());
+            mesh.SetUVs(0, sprite.uv.ToList());
+            mesh.SetTriangles(Array.ConvertAll(sprite.triangles, i => (int)i), 0);
+            return mesh;
         }
     }
 
@@ -275,6 +285,22 @@ namespace Utility
             Gizmos.color = transparent ? new Color(color.r, color.g, color.b, 0.2f) : color;
             Gizmos.DrawSphere(center, radius);
             #endif
+        }
+        
+        public static void DrawLine(Vector3 from, Vector3 to, Color color, bool transparent = false)
+        {
+            #if UNITY_EDITOR
+            Gizmos.color = transparent ? new Color(color.r, color.g, color.b, 0.2f) : color;
+            Gizmos.DrawLine(from, to);
+            #endif 
+        }
+        
+        public static void DrawLine(Vector3 from, Vector3 direction, float distance, Color color, bool transparent = false)
+        {
+            #if UNITY_EDITOR
+            Gizmos.color = transparent ? new Color(color.r, color.g, color.b, 0.2f) : color;
+            Gizmos.DrawRay(from, direction * distance);
+            #endif 
         }
     }
 }

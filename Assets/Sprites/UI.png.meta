@@ -332,6 +332,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: BulletHole1
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 307
+        width: 58
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cb08ce01c4e046028f396ac70304b97
+      internalID: -1206062018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BulletHole2
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 317
+        width: 52
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e77ea697be5e445aea00bdb71b3b1714
+      internalID: -1897505686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -344,6 +386,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Arrow: 98269136
+      BulletHole1: -1206062018
+      BulletHole2: -1897505686
       GemColor1: 2086731720
       GemColor2: 748717833
       GemColor3: -390541762
