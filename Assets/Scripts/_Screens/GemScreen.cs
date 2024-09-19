@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using MyBox;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
@@ -88,7 +89,7 @@ public class GemScreen : BaseScreen
                     position = gem.Key.transform.position
                 }
             };
-
+            
             gObj.tag = "Gem";
             gObj.AddComponent<RectTransform>();
             gObj.AddComponent<CanvasGroup>();
@@ -126,6 +127,7 @@ public class GemScreen : BaseScreen
             var gemObj = gObj.AddComponent<GemObject>();
             await gemObj.RestoreGem(gem.Value);
             gemObj.lastCachedGemSlot = gem.Key;
+            if (gem.Key is GunGemSlot) gObj.transform.localScale = (VectorExtensions.CreateV3(0.8f));
             Gems.Add(gemObj);
         }
         

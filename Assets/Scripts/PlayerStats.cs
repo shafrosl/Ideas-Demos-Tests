@@ -12,6 +12,8 @@ public class PlayerStats
     public BarrelObject CurrBarrelObj;
     public StockObject CurrStockObj;
 
+    public PlayerStats() => GunStats = new();
+
     public UniTask SetStats(List<DataObject> stats)
     {
         foreach (var stat in stats)

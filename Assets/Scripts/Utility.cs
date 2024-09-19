@@ -158,6 +158,9 @@ namespace Utility
 
     public static class VectorExtensions
     {
+        public static Vector2 CreateV2(float value) => new (value, value);
+        public static Vector3 CreateV3(float value) => new (value, value, value);
+        public static Vector4 CreateV4(float value) => new (value, value, value, value);
         public static Vector2 Modify(this Vector2 point, float? x = null, float? y = null)
         {
             // transform.position = transform.position.Modify(y: 0)

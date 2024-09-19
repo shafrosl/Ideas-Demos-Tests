@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
 
     public async void StartGame()
     {
+        GemsInGame.Clear();
+        PlayerStats = new PlayerStats();
         await GunSelectController.StartGame();
         await GunSelectController.ToggleScreen(false, false);
         UICamera.gameObject.SetActive(false);

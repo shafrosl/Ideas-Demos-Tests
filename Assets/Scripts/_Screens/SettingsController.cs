@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility;
 
 public class SettingsController : BaseController
 {
@@ -15,8 +16,11 @@ public class SettingsController : BaseController
         if (!GameManager.Instance.GunSelectController) return;
         if (GameManager.Instance.GameStarted)
         {
+            if (!GameManager.Instance.GemsInGame.IsSafe()) return;
             var restored = await GameManager.Instance.GunSelectController.GemScreen.RestoreGems();
             if (!restored) return;
+            GameManager.Instance.UICamera.gameObject.SetActive(false);
+            GameManager.Instance.GameCamera.gameObject.SetActive(true);
         }
         await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
         await ToggleScreen(false,false);
