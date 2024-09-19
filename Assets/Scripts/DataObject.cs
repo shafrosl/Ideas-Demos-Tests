@@ -2,16 +2,17 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using Utility;
 
 public class DataObject : MonoBehaviour
 {
     public Slider Slider;
     public TextMeshProUGUI Name;
     
-    public void Initialize(string modifier, int value)
+    public void Initialize(Modifier modifier, int value)
     {
-        Slider.Initialize(value);
-        Name.text = modifier;
+        Slider.Initialize(modifier, value);
+        Name.text = modifier.GetName();
     }
 
     public async UniTask<UniTask> Fade(int value, float duration = 0)

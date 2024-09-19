@@ -9,8 +9,14 @@ public class GunDataScreen : BaseScreen
     public float AnimationTime;
     public Transform Container;
     public DataObject Data;
-    private List<DataObject> DataList = new();
+    public List<DataObject> DataList = new();
 
+    public UniTask SetPlayerData()
+    {
+        
+        return UniTask.CompletedTask;
+    }
+    
     public UniTask InitializeData(BodyObject gunObject)
     {
         DataObject obj;
@@ -21,7 +27,7 @@ public class GunDataScreen : BaseScreen
         foreach (var stat in gunObject.Stats)
         {
             obj = Instantiate(Data, Container);
-            obj.Initialize(stat.Modifier.GetName(), stat.Value);
+            obj.Initialize(stat.Modifier, stat.Value);
             DataList.Add(obj);
             obj.gameObject.SetActive(stat.Value > 0);
         }
@@ -49,7 +55,7 @@ public class GunDataScreen : BaseScreen
             if (found) continue;
             Data.gameObject.SetActive(true);
             obj = Instantiate(Data, Container);
-            obj.Initialize(stat.Modifier.GetName(), stat.Value);
+            obj.Initialize(stat.Modifier, stat.Value);
             DataList.Add(obj);
             obj.gameObject.SetActive(stat.Value > 0);
             Data.gameObject.SetActive(false);
@@ -58,7 +64,7 @@ public class GunDataScreen : BaseScreen
         return UniTask.CompletedTask;
     }
     
-    public async UniTask<UniTask> AddData(GemObj gemObj)
+    public async UniTask<UniTask> AddData(GemObject gemObj)
     {
         DataObject obj;
         foreach (var mod in gemObj.Mods)
@@ -91,7 +97,7 @@ public class GunDataScreen : BaseScreen
             if (found) continue;
             Data.gameObject.SetActive(true);
             obj = Instantiate(Data, Container);
-            obj.Initialize(mod.Modifier.GetName(), mod.FinalizedValue);
+            obj.Initialize(mod.Modifier, mod.FinalizedValue);
             DataList.Add(obj);
             obj.gameObject.SetActive(mod.FinalizedValue > 0);
             Data.gameObject.SetActive(false);
@@ -105,13 +111,13 @@ public class GunDataScreen : BaseScreen
         DataObject obj;
         Data.gameObject.SetActive(true);
         obj = Instantiate(Data, Container);
-        obj.Initialize(mod.Modifier.GetName(), 0);
+        obj.Initialize(mod.Modifier, 0);
         DataList.Add(obj);
         Data.gameObject.SetActive(false);
         return UniTask.FromResult(obj);
     }
 
-    public async UniTask<UniTask> RemoveData(GemObj gemObj)
+    public async UniTask<UniTask> RemoveData(GemObject gemObj)
     {
         foreach (var mod in gemObj.Mods)
         {
@@ -141,7 +147,7 @@ public class GunDataScreen : BaseScreen
         return UniTask.CompletedTask;
     }
 
-    public async UniTask<UniTask> AddTempData(GemObj gemObj)
+    public async UniTask<UniTask> AddTempData(GemObject gemObj)
     {
         foreach (var mod in gemObj.Mods)
         {
@@ -193,7 +199,7 @@ public class GunDataScreen : BaseScreen
         return UniTask.CompletedTask;
     }
     
-    public async UniTask<UniTask> RemoveTempData(GemObj gemObj)
+    public async UniTask<UniTask> RemoveTempData(GemObject gemObj)
     {
         foreach (var mod in gemObj.Mods)
         {

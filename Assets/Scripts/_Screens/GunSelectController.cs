@@ -1,12 +1,10 @@
 using Cysharp.Threading.Tasks;
 using MyBox;
-using UnityEngine;
 using UnityEngine.UI;
 using Debug = Utility.Debug;
 
-public class GunSelectController : MonoBehaviour
+public class GunSelectController : BaseController
 {
-    [ConditionalField(nameof(Canvas), true), SerializeField] public Canvas Canvas;
     [ConditionalField(nameof(GunSelectScreen), true)] public GunSelectScreen GunSelectScreen;
     [ConditionalField(nameof(GunDataScreen), true)] public GunDataScreen GunDataScreen;
     [ConditionalField(nameof(GemScreen), true)] public GemScreen GemScreen;
@@ -15,22 +13,22 @@ public class GunSelectController : MonoBehaviour
 
     public Button RandomizeAttachment;
     public Button RandomizeGems;
+    public Button StartGameBtn;
 
-    private async void Start()
+    public override async UniTask Start()
     {
-        while (!GameManager.Instance.IsReady) await UniTask.Delay(50);
-        await Initialize();
+        await base.Start();
         if (GunSelectScreen) await GunSelectScreen.Initialize();
         if (GemScreen) await GemScreen.Initialize();
         if (GunDataScreen)
         {
-            await GunDataScreen.InitializeData(GameManager.Instance.currBodyObj);
-            await GunDataScreen.AddData(GameManager.Instance.currStockObj);
-            await GunDataScreen.AddData(GameManager.Instance.currBarrelObj);
+            await GunDataScreen.InitializeData(GameManager.Instance.PlayerStats.CurrBodyObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
         }
     }
 
-    private UniTask Initialize()
+    public override UniTask Initialize()
     {
         if (GunSelectScreen)
         {
@@ -47,8 +45,15 @@ public class GunSelectController : MonoBehaviour
         }
         
         if (RandomizeGems) RandomizeGems.onClick.RemoveAllListeners();
+        
+        if (StartGameBtn)
+        {
+            StartGameBtn.onClick.RemoveAllListeners();
+            StartGameBtn.onClick.AddListener(GameManager.Instance.StartGame);
+        }
+        
         currentItem = 0;
-        return UniTask.CompletedTask;
+        return base.Initialize();
     }
     
     private async void PrevWeapon()
@@ -63,9 +68,9 @@ public class GunSelectController : MonoBehaviour
         }
         if (GunDataScreen)
         {
-            await GunDataScreen.InitializeData(GameManager.Instance.currBodyObj);
-            await GunDataScreen.AddData(GameManager.Instance.currStockObj);
-            await GunDataScreen.AddData(GameManager.Instance.currBarrelObj);
+            await GunDataScreen.InitializeData(GameManager.Instance.PlayerStats.CurrBodyObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
         }
     }
 
@@ -81,9 +86,9 @@ public class GunSelectController : MonoBehaviour
         }
         if (GunDataScreen)
         {
-            await GunDataScreen.InitializeData(GameManager.Instance.currBodyObj);
-            await GunDataScreen.AddData(GameManager.Instance.currStockObj);
-            await GunDataScreen.AddData(GameManager.Instance.currBarrelObj);
+            await GunDataScreen.InitializeData(GameManager.Instance.PlayerStats.CurrBodyObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
         }
     }
     
@@ -92,9 +97,9 @@ public class GunSelectController : MonoBehaviour
         GunSelectScreen.LoadAttachments(currentItem);
         if (GunDataScreen)
         {
-            await GunDataScreen.InitializeData(GameManager.Instance.currBodyObj);
-            await GunDataScreen.AddData(GameManager.Instance.currStockObj);
-            await GunDataScreen.AddData(GameManager.Instance.currBarrelObj);
+            await GunDataScreen.InitializeData(GameManager.Instance.PlayerStats.CurrBodyObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
         }
     }
 
@@ -103,9 +108,18 @@ public class GunSelectController : MonoBehaviour
         if (GunSelectScreen) GunSelectScreen.RandomizeRarity(currentItem);
         if (GunDataScreen)
         {
-            await GunDataScreen.InitializeData(GameManager.Instance.currBodyObj);
-            await GunDataScreen.AddData(GameManager.Instance.currStockObj);
-            await GunDataScreen.AddData(GameManager.Instance.currBarrelObj);
+            await GunDataScreen.InitializeData(GameManager.Instance.PlayerStats.CurrBodyObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
+            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
         }
+    }
+
+    public async UniTask StartGame()
+    {
+        await GameManager.Instance.PlayerStats.SetStats(GameManager.Instance.GunSelectController.GunDataScreen.DataList);
+        await GunSelectScreen.StoreGems();
+        await GunSelectScreen.DestroyGems();
+        await GemScreen.StoreGems();
+        await GemScreen.DestroyGems();
     }
 }

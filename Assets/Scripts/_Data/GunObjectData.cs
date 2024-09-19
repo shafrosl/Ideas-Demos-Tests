@@ -97,7 +97,7 @@ public class GunObjectData : ItemObjectData
         };
         
         var objI = body.AddComponent<Image>();
-        GameManager.Instance.currBodyObj.Set(Bodies[i]);
+        GameManager.Instance.PlayerStats.CurrBodyObj.Set(Bodies[i]);
         objI.sprite = Bodies[i].Icon;
         objI.preserveAspect = true;
         objI.SetNativeSize();
@@ -116,7 +116,7 @@ public class GunObjectData : ItemObjectData
         var randI = Random.Range(0, Barrels.Count);
         barrel = new GameObject(Barrels[randI].Name);
         var objI = barrel.AddComponent<Image>();
-        GameManager.Instance.currBarrelObj.Set(Barrels[randI]);
+        GameManager.Instance.PlayerStats.CurrBarrelObj.Set(Barrels[randI]);
         objI.sprite = Barrels[randI].Icon;
         objI.preserveAspect = true;
         objI.SetNativeSize();
@@ -135,7 +135,7 @@ public class GunObjectData : ItemObjectData
         var randI = Random.Range(0, Barrels.Count);
         stock = new GameObject(Stocks[randI].Name);
         var objI = stock.AddComponent<Image>();
-        GameManager.Instance.currStockObj.Set(Stocks[randI]);
+        GameManager.Instance.PlayerStats.CurrStockObj.Set(Stocks[randI]);
         objI.sprite = Stocks[randI].Icon;
         objI.preserveAspect = true;
         objI.SetNativeSize();

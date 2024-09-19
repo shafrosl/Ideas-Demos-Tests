@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utility;
 using Debug = Utility.Debug;
 
-public class GemObj : DraggableObject
+public class GemObject : DraggableObject
 {
     public DraggableObjectReceiver lastCachedGemSlot;
     public List<GemColorValue> Mods = new();
@@ -25,6 +26,24 @@ public class GemObj : DraggableObject
             if (j == Mods.Count - 1) j = 0;
             else j++;
         }
+    }
+
+    public UniTask RestoreGem(List<GemColorValue> mods)
+    {
+        if (!mods.IsSafe()) return UniTask.CompletedTask;
+        if (TryGetComponent(out RectTransform rt)) rectTransform = rt;
+        if (TryGetComponent(out CanvasGroup cg)) canvasGroup = cg;
+        Mods = mods;
+        var children = Transforms.GetAllChildrenInTransform(transform, out _);
+        var j = 0;
+        for (var i = 0; i < 5; i++)
+        {
+            children[i].GetComponent<Image>().color = Mods[j].Color;
+            if (j == Mods.Count - 1) j = 0;
+            else j++;
+        }
+        
+        return UniTask.CompletedTask;
     }
 
     public override void OnPointerDown(PointerEventData eventData)

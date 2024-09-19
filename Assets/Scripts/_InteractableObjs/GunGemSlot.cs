@@ -14,7 +14,7 @@ public class GunGemSlot : GemSlot, IPointerEnterHandler, IPointerExitHandler
     {
         base.OnDrop(eventData);
         if (eventData.pointerDrag is null) return;
-        if (eventData.pointerDrag.TryGetComponent(out GemObj gem))
+        if (eventData.pointerDrag.TryGetComponent(out GemObject gem))
         {
             var dataScreen = GameManager.Instance.GunSelectController.GunDataScreen;
             await dataScreen.AddData(gem);
@@ -25,7 +25,7 @@ public class GunGemSlot : GemSlot, IPointerEnterHandler, IPointerExitHandler
     public async void OnPointerEnter(PointerEventData eventData)
     {
         if (eventData.pointerDrag is null) return;
-        if (eventData.pointerDrag.TryGetComponent(out GemObj gem))
+        if (eventData.pointerDrag.TryGetComponent(out GemObject gem))
         {
             var dataScreen = GameManager.Instance.GunSelectController.GunDataScreen;
             if (updateData) await dataScreen.AddTempData(gem);
@@ -36,7 +36,7 @@ public class GunGemSlot : GemSlot, IPointerEnterHandler, IPointerExitHandler
     public async void OnPointerExit(PointerEventData eventData)
     {
         if (eventData.pointerDrag is null) return;
-        if (eventData.pointerDrag.TryGetComponent(out GemObj gem))
+        if (eventData.pointerDrag.TryGetComponent(out GemObject gem))
         {
             var dataScreen = GameManager.Instance.GunSelectController.GunDataScreen;
             await dataScreen.RemoveTempData(gem);

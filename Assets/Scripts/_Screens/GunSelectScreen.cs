@@ -12,7 +12,7 @@ public class GunSelectScreen : BaseScreen
     public TextMeshProUGUI Name;
     public Transform Backing;
     public GameObject Gun;
-    public List<GemObj> Gems;
+    public List<GemObject> Gems;
     
     public override UniTask Initialize()
     {
@@ -30,7 +30,7 @@ public class GunSelectScreen : BaseScreen
         if (Gun) Destroy(Gun);
         if (!GameManager.Instance.GunData.Bodies.IsSafe()) return UniTask.CompletedTask;
         if (!GameManager.Instance.GunData.InstantiateBody(weaponID, out var gun, out var body)) return UniTask.CompletedTask;
-        if (GameManager.Instance.currBodyObj is not null) Name.text = GameManager.Instance.currBodyObj.Name;
+        if (GameManager.Instance.PlayerStats.CurrBodyObj is not null) Name.text = GameManager.Instance.PlayerStats.CurrBodyObj.Name;
         Gun = gun;
         Gun.transform.parent = Backing.transform;
         Gun.transform.localScale = Vector3.one;
@@ -64,13 +64,13 @@ public class GunSelectScreen : BaseScreen
         if (GameManager.Instance.GunData.InstantiateBarrel(out var barrel))
         {
             barrel.transform.parent = Gun.transform;
-            GameManager.Instance.GunData.SetPosition(barrel.transform, GameManager.Instance.currBarrelObj.GetPosition(weaponID));
+            GameManager.Instance.GunData.SetPosition(barrel.transform, GameManager.Instance.PlayerStats.CurrBarrelObj.GetPosition(weaponID));
         }
 
         if (GameManager.Instance.GunData.InstantiateStock(out var stock))
         {
             stock.transform.parent = Gun.transform;            
-            GameManager.Instance.GunData.SetPosition(stock.transform, GameManager.Instance.currStockObj.GetPosition(weaponID));
+            GameManager.Instance.GunData.SetPosition(stock.transform, GameManager.Instance.PlayerStats.CurrStockObj.GetPosition(weaponID));
         }
         return UniTask.CompletedTask;
     }
@@ -79,6 +79,12 @@ public class GunSelectScreen : BaseScreen
     {
         foreach (var gem in Gems) Destroy(gem.gameObject);
         Gems.Clear();
+        return UniTask.CompletedTask;
+    }
+
+    public UniTask StoreGems()
+    {
+        foreach (var gem in Gems) GameManager.Instance.GemsInGame.Add(gem.lastCachedGemSlot, gem.Mods);
         return UniTask.CompletedTask;
     }
 }

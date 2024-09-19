@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
@@ -8,7 +10,7 @@ public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform Sprites;
     public Transform BulletExit;
-    
+
     [Header("Player State")] 
     public bool isHidden;
     public bool isHiding;
@@ -22,10 +24,12 @@ public class Player : MonoBehaviour, IMovement, IGun
     public float speedV = 2.0f;
     private float yaw, pitch;
 
-    [Header("Timers")] 
-    private float internalCooldownTimer;
-    public float cooldownTimer;
+    [Header("Timers")]
+    public float reloadCooldownTimer;
+    private float internalReloadCooldownTimer;
 
+    private CancellationTokenSource ctx = new();
+    
     private void Update()
     {
         Look();
@@ -51,20 +55,32 @@ public class Player : MonoBehaviour, IMovement, IGun
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if (isHiding)
+            {
+                ctx.Cancel();
+                ctx.Dispose();
+                ctx = new();
+            }
             isHiding = true;
             pitch = 12.5f;
-            await Sprites.DOLocalMoveY(-700, 0.5f);
+            await Sprites.DOLocalMoveY(-700, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             isHiding = false;
             isHidden = true;
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            if (isHiding)
+            {
+                ctx.Cancel();
+                ctx.Dispose();
+                ctx = new();
+            }
             isReloading = false;
             isHidden = false;
             isHiding = true;
             pitch = 0;
-            await Sprites.DOLocalMoveY(0, 0.5f);
+            await Sprites.DOLocalMoveY(0, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             isHiding = false;
         }
     }
@@ -72,15 +88,15 @@ public class Player : MonoBehaviour, IMovement, IGun
     public void OnShoot()
     {
         if (Input.GetMouseButtonDown(0)) isShooting = true;
-        if (internalCooldownTimer > 0)
+        if (internalReloadCooldownTimer > 0)
         {
-            internalCooldownTimer -= Time.deltaTime;
+            internalReloadCooldownTimer -= Time.deltaTime;
         }
         else
         {
             if (isShooting)
             {
-                internalCooldownTimer = cooldownTimer;
+                internalReloadCooldownTimer = reloadCooldownTimer;
                 Ray ray = new Ray(BulletExit.position, GameManager.Instance.GameCamera.transform.forward);
                 var hit = Physics2D.GetRayIntersection(ray);
                 if (hit.collider is null) return;

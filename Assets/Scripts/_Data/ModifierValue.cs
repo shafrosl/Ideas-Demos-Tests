@@ -12,7 +12,7 @@ public class ModifierValue
 public class GemColorValue : ModifierValue
 {
     [SerializeField] public Color Color;
-    [SerializeField, HideInInspector] public int FinalizedValue;
+    [SerializeField] public int FinalizedValue;
     public void RandomizeGem(Vector2Int Range) => FinalizedValue = Random.Range(Range.x, Range.y);
 }
 

@@ -10,10 +10,12 @@ public class Slider : MonoBehaviour
     public Image Main, Decrement, Increment, Border;
     [MinValue(0), MaxValue(100)] private int currentValue; 
     [MinValue(0), MaxValue(100)] private int alteredValue;
+    private Modifier modifier;
     
     public float AnimationSpeed = 1f;
     public int CurrentValue => currentValue;
     public int AlteredValue => alteredValue;
+    public Modifier Modifier => modifier;
     private void Update() => UpdateBars();
     public void ChangeMainValue(int value) => currentValue += value;
     public void ChangeTemporaryValue(int difference) => alteredValue = currentValue + difference;
@@ -33,10 +35,11 @@ public class Slider : MonoBehaviour
         Increment.color.Modify(a: 0.75f);
     }
 
-    public void Initialize(int value)
+    public void Initialize(Modifier mod, int value)
     {
         Reset();
         Main.fillAmount = currentValue = value;
+        modifier = mod;
     }
 
     private void UpdateBars()

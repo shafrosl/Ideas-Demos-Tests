@@ -6,7 +6,7 @@ public class TrashSlot : GemSlot
     {
         base.OnDrop(eventData);
         if (eventData.pointerDrag is null) return;
-        if (eventData.pointerDrag.TryGetComponent(out GemObj gem))
+        if (eventData.pointerDrag.TryGetComponent(out GemObject gem))
         {
             var gemsGeS = GameManager.Instance.GunSelectController.GemScreen.Gems;
             var found = gemsGeS.FindIndex(x => x.ObjID == gem.ObjID);
