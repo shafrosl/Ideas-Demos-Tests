@@ -19,8 +19,9 @@ public class SettingsController : BaseController
             if (!GameManager.Instance.GemsInGame.IsSafe()) return;
             var restored = await GameManager.Instance.GunSelectController.GemScreen.RestoreGems();
             if (!restored) return;
-            GameManager.Instance.UICamera.gameObject.SetActive(false);
-            GameManager.Instance.GameCamera.gameObject.SetActive(true);
+            GameManager.Instance.GemsInGame.Clear();
+            GameManager.Instance.UICamera.gameObject.SetActive(true);
+            GameManager.Instance.GameCamera.gameObject.SetActive(false);
         }
         await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
         await ToggleScreen(false,false);
@@ -33,6 +34,9 @@ public class SettingsController : BaseController
         ToggleResumeBtn(GameManager.Instance.GameStarted);
         if (CanvasGroup.alpha == 0)
         {
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = true;
+            GameManager.Instance.UICamera.gameObject.SetActive(true);
+            GameManager.Instance.GameCamera.gameObject.SetActive(false);
             await CanvasGroup.DOFade(1, .5f).SetUpdate(true).WithCancellation(ct);
             CanvasGroup.interactable = CanvasGroup.blocksRaycasts = true;
             GameManager.Instance.ToggleCursorLock(false);
@@ -41,11 +45,14 @@ public class SettingsController : BaseController
         }
         else
         {
+            GameManager.Instance.UICamera.gameObject.SetActive(false);
+            GameManager.Instance.GameCamera.gameObject.SetActive(true);
             await CanvasGroup.DOFade(0, 0.5f).SetUpdate(true).WithCancellation(ct);
             CanvasGroup.interactable = CanvasGroup.blocksRaycasts = false;
             GameManager.Instance.ToggleCursorLock(true);
             GameManager.Instance.ToggleGamePaused(false);
             Time.timeScale = 1;
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = false;
         }
 
         return UniTask.CompletedTask;
@@ -57,6 +64,9 @@ public class SettingsController : BaseController
         ToggleResumeBtn(GameManager.Instance.GameStarted);
         if (show)
         {
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = true;
+            GameManager.Instance.UICamera.gameObject.SetActive(true);
+            GameManager.Instance.GameCamera.gameObject.SetActive(false);
             await CanvasGroup.DOFade(1, .5f).SetUpdate(true).WithCancellation(ct);
             CanvasGroup.interactable = CanvasGroup.blocksRaycasts = true;
             GameManager.Instance.ToggleCursorLock(false);
@@ -65,11 +75,14 @@ public class SettingsController : BaseController
         }
         else
         {
+            GameManager.Instance.UICamera.gameObject.SetActive(false);
+            GameManager.Instance.GameCamera.gameObject.SetActive(true);
             await CanvasGroup.DOFade(0, 0.5f).SetUpdate(true).WithCancellation(ct);
             CanvasGroup.interactable = CanvasGroup.blocksRaycasts = false;
             GameManager.Instance.ToggleCursorLock(true);
             GameManager.Instance.ToggleGamePaused(false);
             Time.timeScale = 1;
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = false;
         }
 
         return UniTask.CompletedTask;

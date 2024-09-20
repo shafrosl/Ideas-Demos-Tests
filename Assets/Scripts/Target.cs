@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using MyBox;
-using Unity.VisualScripting;
-using Utility;
+using Random = UnityEngine.Random;
 
 public class Target : MonoBehaviour, IBulletHole
 {

@@ -44,8 +44,8 @@ public class Slider : MonoBehaviour
 
     private void UpdateBars()
     {
-        var cValue = CurrentValue.ToFloat(100);
-        var aValue = AlteredValue.ToFloat(100);
+        var cValue = CurrentValue.ToFloat(10);
+        var aValue = AlteredValue.ToFloat(10);
         if (Math.Abs(cValue - aValue) > 0)
         {
             if (aValue > cValue)

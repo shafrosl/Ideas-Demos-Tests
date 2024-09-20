@@ -5,6 +5,20 @@ public enum GunPart
     Barrel
 }
 
+/// <summary>
+/// fire rate = bullets per second
+/// reload speed = how many times faster it takes to reload
+/// recoil control = 0 no control, 10 absolute control
+/// magazine size = in groups of 5 (eg. 1 is 1 x 5 = 5)
+///
+/// burn dmg = burn dmg per second
+/// burn duration = how long burn lasts
+/// damage = damage per bullet
+/// heal on damage = % of dmg is healed per bullet
+/// stun duration = how long target is stunned for
+/// knockback = how far target is knocked back
+/// </summary>
+
 public enum Modifier
 {
     Null = 0,

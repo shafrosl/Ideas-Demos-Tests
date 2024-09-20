@@ -22,87 +22,87 @@ MonoBehaviour:
   GemColorValues:
   - Modifier: 1
     Color: {r: 1, g: 0.29411766, b: 0.29411766, a: 1}
-    FinalizedValue: 3
+    FinalizedValue: -11
   - Modifier: 2
     Color: {r: 1, g: 0.6862745, b: 0.29411766, a: 1}
-    FinalizedValue: 1
+    FinalizedValue: 13
   - Modifier: 3
     Color: {r: 1, g: 0.98194367, b: 0.2941177, a: 1}
-    FinalizedValue: 8
+    FinalizedValue: 9
   - Modifier: 4
     Color: {r: 0.67410547, g: 1, b: 0.2941177, a: 1}
-    FinalizedValue: 14
+    FinalizedValue: 10
   - Modifier: 5
     Color: {r: 0.2980392, g: 1, b: 0.41910845, a: 1}
-    FinalizedValue: -15
+    FinalizedValue: 20
   - Modifier: 6
     Color: {r: 0.2941177, g: 0.9320376, b: 1, a: 1}
-    FinalizedValue: 27
+    FinalizedValue: -11
   - Modifier: 7
     Color: {r: 0.2941177, g: 0.6054269, b: 1, a: 1}
-    FinalizedValue: -12
+    FinalizedValue: 27
   - Modifier: 8
     Color: {r: 0.3055544, g: 0.2941177, b: 1, a: 1}
-    FinalizedValue: -1
+    FinalizedValue: -19
   - Modifier: 9
     Color: {r: 0.7984507, g: 0.2941177, b: 1, a: 1}
-    FinalizedValue: 29
+    FinalizedValue: 7
   - Modifier: 10
     Color: {r: 1, g: 0.2941177, b: 0.7149196, a: 1}
-    FinalizedValue: -12
+    FinalizedValue: -14
   GemTierCombos:
   - Tier: 1
     Chance: 100
     Range:
-    - {x: 5, y: 15}
+    - {x: 1, y: 2}
   - Tier: 1
     Chance: 90
     Range:
-    - {x: 20, y: 30}
-    - {x: -15, y: -10}
-    - {x: -15, y: -10}
+    - {x: 2, y: 3}
+    - {x: -2, y: -1}
+    - {x: -2, y: -1}
   - Tier: 1
     Chance: 80
     Range:
-    - {x: 5, y: 15}
-    - {x: 5, y: 15}
-    - {x: -20, y: -15}
+    - {x: 1, y: 2}
+    - {x: 1, y: 2}
+    - {x: -2, y: -1}
   - Tier: 2
     Chance: 40
     Range:
-    - {x: 25, y: 35}
-    - {x: -15, y: -5}
+    - {x: 3, y: 4}
+    - {x: -2, y: -1}
   - Tier: 2
     Chance: 30
     Range:
-    - {x: 5, y: 15}
-    - {x: 5, y: 15}
-    - {x: 5, y: 15}
-    - {x: 5, y: 15}
-    - {x: -30, y: -15}
+    - {x: 1, y: 2}
+    - {x: 1, y: 2}
+    - {x: 1, y: 2}
+    - {x: 1, y: 2}
+    - {x: -3, y: -2}
   - Tier: 2
     Chance: 20
     Range:
-    - {x: 25, y: 35}
-    - {x: 30, y: 40}
-    - {x: -35, y: -20}
-    - {x: -10, y: -5}
+    - {x: 3, y: 4}
+    - {x: 3, y: 4}
+    - {x: -4, y: -2}
+    - {x: -2, y: -1}
   - Tier: 3
     Chance: 10
     Range:
-    - {x: 40, y: 50}
-    - {x: -20, y: -10}
-    - {x: -20, y: -10}
-    - {x: -10, y: -5}
+    - {x: 4, y: 5}
+    - {x: -2, y: -1}
+    - {x: -2, y: -1}
+    - {x: -2, y: -1}
   - Tier: 3
     Chance: 5
     Range:
-    - {x: 25, y: 45}
-    - {x: 25, y: 45}
-    - {x: 25, y: 45}
-    - {x: -35, y: -45}
+    - {x: 3, y: 5}
+    - {x: 3, y: 5}
+    - {x: 3, y: 4}
+    - {x: -5, y: -4}
   - Tier: 3
     Chance: 1
     Range:
-    - {x: 45, y: 50}
-    - {x: -10, y: -5}
+    - {x: 5, y: 6}
+    - {x: -2, y: -1}

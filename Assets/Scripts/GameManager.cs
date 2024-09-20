@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
-using AYellowpaper.SerializedCollections;
+using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
+using Debug = Utility.Debug;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class GameManager : MonoBehaviour
     public GunObjectData GunData;
     public GemObjectData GemData;
     public PlayerStats PlayerStats;
-    [SerializeField, SerializedDictionary("Last Cached Slot", "Modifiers")] public SerializedDictionary<DraggableObjectReceiver, List<GemColorValue>> GemsInGame;
+    public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
     
     [Header("Game States")]
     public bool GameStarted;
@@ -23,6 +25,7 @@ public class GameManager : MonoBehaviour
     
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;
+    [ConditionalField(nameof(PlayerController), true), SerializeField] public Player PlayerController;
     
     public bool IsReady => Instance && GunData && GemData;
     
@@ -43,13 +46,13 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    public void ToggleCursorLock(bool lockPointer)
+    public UniTask ToggleCursorLock(bool lockPointer)
     {
         if (!GameStarted)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            return;
+            return UniTask.CompletedTask;
         }
         
         if (lockPointer)
@@ -62,15 +65,17 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        
+        return UniTask.CompletedTask;
     }
     
-    public void ToggleCursorLock()
+    public UniTask ToggleCursorLock()
     {
         if (!GameStarted)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            return;
+            return UniTask.CompletedTask;;
         }
         
         if (Cursor.visible)
@@ -83,6 +88,8 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        
+        return UniTask.CompletedTask;
     }
 
     private async void ToggleSettingsScreen()
@@ -93,14 +100,15 @@ public class GameManager : MonoBehaviour
 
     public async void StartGame()
     {
-        GemsInGame.Clear();
-        PlayerStats = new PlayerStats();
-        await GunSelectController.StartGame();
-        await GunSelectController.ToggleScreen(false, false);
         UICamera.gameObject.SetActive(false);
         GameCamera.gameObject.SetActive(true);
-        ToggleCursorLock(true);
+        PlayerController.lockMovement = true;
         GameStarted = true;
+        await ToggleCursorLock(true);
+        PlayerStats = new PlayerStats(PlayerStats);
+        await GunSelectController.StartGame();
+        await GunSelectController.ToggleScreen(false, false);
+        PlayerController.ResetState();
     }
 
     public void ToggleGamePaused(bool paused)

@@ -31,8 +31,7 @@ public class GemObject : DraggableObject
     public UniTask RestoreGem(List<GemColorValue> mods)
     {
         if (!mods.IsSafe()) return UniTask.CompletedTask;
-        if (TryGetComponent(out RectTransform rt)) rectTransform = rt;
-        if (TryGetComponent(out CanvasGroup cg)) canvasGroup = cg;
+        base.Initialize();
         Mods = mods;
         var children = Transforms.GetAllChildrenInTransform(transform, out _);
         var j = 0;

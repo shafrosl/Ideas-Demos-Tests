@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -84,7 +85,7 @@ public class GunSelectScreen : BaseScreen
 
     public UniTask StoreGems()
     {
-        foreach (var gem in Gems) GameManager.Instance.GemsInGame.Add(gem.lastCachedGemSlot, gem.Mods);
+        foreach (var gem in Gems) GameManager.Instance.GemsInGame.Add(new Tuple<DraggableObjectReceiver, List<GemColorValue>>(gem.lastCachedGemSlot, gem.Mods));
         return UniTask.CompletedTask;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
@@ -86,7 +87,7 @@ public class GemScreen : BaseScreen
                 transform =
                 {
                     parent = GameManager.Instance.GunSelectController.Canvas.transform,
-                    position = gem.Key.transform.position
+                    position = gem.Item1.transform.position
                 }
             };
             
@@ -125,10 +126,17 @@ public class GemScreen : BaseScreen
             fImg.preserveAspect = true;
             
             var gemObj = gObj.AddComponent<GemObject>();
-            await gemObj.RestoreGem(gem.Value);
-            gemObj.lastCachedGemSlot = gem.Key;
-            if (gem.Key is GunGemSlot) gObj.transform.localScale = (VectorExtensions.CreateV3(0.8f));
-            Gems.Add(gemObj);
+            await gemObj.RestoreGem(gem.Item2);
+            gemObj.lastCachedGemSlot = gem.Item1;
+            if (gem.Item1 is GunGemSlot)
+            {
+                gObj.transform.localScale = VectorExtensions.CreateV3(0.8f);
+                GameManager.Instance.GunSelectController.GunSelectScreen.Gems.Add(gemObj);
+            }
+            else
+            {
+                Gems.Add(gemObj);
+            }
         }
         
         return true;
@@ -147,7 +155,8 @@ public class GemScreen : BaseScreen
     
     public UniTask StoreGems()
     {
-        foreach (var gem in Gems) GameManager.Instance.GemsInGame.Add(gem.lastCachedGemSlot, gem.Mods);
+        // fix dictionary -> key value cant be the same
+        foreach (var gem in Gems) GameManager.Instance.GemsInGame.Add(new Tuple<DraggableObjectReceiver, List<GemColorValue>>(gem.lastCachedGemSlot, gem.Mods));
         return UniTask.CompletedTask;
     }
 }

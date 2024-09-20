@@ -13,6 +13,14 @@ public class PlayerStats
     public StockObject CurrStockObj;
 
     public PlayerStats() => GunStats = new();
+    
+    public PlayerStats(PlayerStats playerStats)
+    {
+        CurrBodyObj = playerStats.CurrBodyObj;
+        CurrBarrelObj = playerStats.CurrBarrelObj;
+        CurrStockObj = playerStats.CurrStockObj;
+        GunStats = new();
+    }
 
     public UniTask SetStats(List<DataObject> stats)
     {

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Threading;
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform Sprites;
     public Transform BulletExit;
+    public CinemachineVirtualCamera Cinemachine;
 
     [Header("Player State")] 
     public bool isHidden;
@@ -17,6 +18,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     public bool isShooting;
     public bool isReloading;
     public bool isReloaded;
+    public bool lockMovement;
     
     [Header("Movement Settings")]
     [MinMaxRange(-15, 15)] public RangedFloat range;
@@ -30,14 +32,17 @@ public class Player : MonoBehaviour, IMovement, IGun
 
     private CancellationTokenSource ctx = new();
     
+    public void ResetState() => isHidden = isHiding = isShooting = isReloaded = isReloading = lockMovement =false;
+    
     private void Update()
     {
+        if (lockMovement) return;
         Look();
         Hide();
         OnShoot();
         OnReload();
     }
-
+    
     public void Look()
     {
         if (isHidden) return;
@@ -48,7 +53,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             if (pitch > range.Max) pitch = range.Max;
             else if (pitch < range.Min) pitch = range.Min;
         }
-        transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+        Cinemachine.transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
     }
 
     public async void Hide()
@@ -127,6 +132,9 @@ public class Player : MonoBehaviour, IMovement, IGun
 
     private void OnDrawGizmos()
     {
-        Debug.DrawLine(BulletExit.position, GameManager.Instance.GameCamera.transform.forward, 100, Color.red);
+        if (Application.isPlaying)
+        {
+            Debug.DrawLine(BulletExit.position, GameManager.Instance.GameCamera.transform.forward, 100, Color.red);
+        }
     }
 }
