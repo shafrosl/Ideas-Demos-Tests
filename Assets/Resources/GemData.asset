@@ -22,34 +22,31 @@ MonoBehaviour:
   GemColorValues:
   - Modifier: 1
     Color: {r: 1, g: 0.29411766, b: 0.29411766, a: 1}
-    FinalizedValue: -11
-  - Modifier: 2
-    Color: {r: 1, g: 0.6862745, b: 0.29411766, a: 1}
-    FinalizedValue: 13
+    FinalizedValue: 0
   - Modifier: 3
     Color: {r: 1, g: 0.98194367, b: 0.2941177, a: 1}
-    FinalizedValue: 9
+    FinalizedValue: 0
   - Modifier: 4
     Color: {r: 0.67410547, g: 1, b: 0.2941177, a: 1}
-    FinalizedValue: 10
+    FinalizedValue: 0
   - Modifier: 5
     Color: {r: 0.2980392, g: 1, b: 0.41910845, a: 1}
-    FinalizedValue: 20
+    FinalizedValue: 0
   - Modifier: 6
     Color: {r: 0.2941177, g: 0.9320376, b: 1, a: 1}
-    FinalizedValue: -11
+    FinalizedValue: 0
   - Modifier: 7
     Color: {r: 0.2941177, g: 0.6054269, b: 1, a: 1}
-    FinalizedValue: 27
+    FinalizedValue: 0
   - Modifier: 8
     Color: {r: 0.3055544, g: 0.2941177, b: 1, a: 1}
-    FinalizedValue: -19
+    FinalizedValue: 0
   - Modifier: 9
     Color: {r: 0.7984507, g: 0.2941177, b: 1, a: 1}
-    FinalizedValue: 7
+    FinalizedValue: 0
   - Modifier: 10
     Color: {r: 1, g: 0.2941177, b: 0.7149196, a: 1}
-    FinalizedValue: -14
+    FinalizedValue: 0
   GemTierCombos:
   - Tier: 1
     Chance: 100

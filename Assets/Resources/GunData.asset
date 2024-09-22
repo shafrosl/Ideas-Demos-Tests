@@ -27,8 +27,6 @@ MonoBehaviour:
       Value: 2
     - Modifier: 4
       Value: 3
-    - Modifier: 2
-      Value: 7
   - ID: 1
     Icon: {fileID: 287642978, guid: 8f83a7564c1424d15838a8c054228a1a, type: 3}
     Name: Revolver Body
@@ -41,8 +39,6 @@ MonoBehaviour:
       Value: 5
     - Modifier: 4
       Value: 1
-    - Modifier: 2
-      Value: 2
   Barrels:
   - ID: 0
     Icon: {fileID: -470077604, guid: 8f83a7564c1424d15838a8c054228a1a, type: 3}

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7421429255967846437}
-  - component: {fileID: 1829789619893778660}
   - component: {fileID: 7042171461741179909}
-  - component: {fileID: 399256596748472313}
+  - component: {fileID: 2924062703765528551}
+  - component: {fileID: 6444371078702309965}
   m_Layer: 0
   m_Name: Target
   m_TagString: Target
@@ -29,12 +29,28 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2, z: 50}
-  m_LocalScale: {x: 0.8478128, y: 0.8478128, z: 0.8478128}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1829789619893778660
+--- !u!114 &7042171461741179909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994588578171796955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87987d627ee8d41f38a5f51cd83245d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetRenderer: {fileID: 0}
+  Holes:
+  - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
+  - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
+--- !u!212 &2924062703765528551
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,23 +102,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7042171461741179909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 994588578171796955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87987d627ee8d41f38a5f51cd83245d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetRenderer: {fileID: 1829789619893778660}
-  Holes:
-  - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
-  - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
---- !u!60 &399256596748472313
+--- !u!60 &6444371078702309965
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

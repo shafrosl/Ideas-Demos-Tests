@@ -11,13 +11,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [ConditionalField(nameof(UICamera), true), SerializeField] public Camera UICamera;
-    [ConditionalField(nameof(GameCamera), true), SerializeField] public  Camera GameCamera;
+    [ConditionalField(nameof(GameCamera), true), SerializeField] public Camera GameCamera;
 
     [Header("Data")] 
     public GunObjectData GunData;
     public GemObjectData GemData;
     public PlayerStats PlayerStats;
     public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
+    public List<GameObject> Holes = new();
     
     [Header("Game States")]
     public bool GameStarted;
@@ -100,8 +101,7 @@ public class GameManager : MonoBehaviour
 
     public async void StartGame()
     {
-        UICamera.gameObject.SetActive(false);
-        GameCamera.gameObject.SetActive(true);
+        ToggleCamera(Cam.Game);
         PlayerController.lockMovement = true;
         GameStarted = true;
         await ToggleCursorLock(true);
@@ -109,6 +109,7 @@ public class GameManager : MonoBehaviour
         await GunSelectController.StartGame();
         await GunSelectController.ToggleScreen(false, false);
         PlayerController.ResetState();
+        PlayerController.SetData();
     }
 
     public void ToggleGamePaused(bool paused)
@@ -116,4 +117,38 @@ public class GameManager : MonoBehaviour
         if (!GameStarted) return;
         gamePaused = paused;
     }
+
+    public void ToggleCamera(Cam cam)
+    {
+        switch (cam)
+        {
+            case Cam.UI:
+                UICamera.gameObject.SetActive(true);
+                GameCamera.gameObject.SetActive(false);
+                break;
+            case Cam.Game:
+                UICamera.gameObject.SetActive(false);
+                GameCamera.gameObject.SetActive(true);
+                break;
+            case Cam.Null:
+                break;
+        }
+    }
+    
+    #if UNITY_EDITOR
+    [ButtonMethod()]
+    public void SetGameCamera()
+    {
+        ToggleCamera(Cam.Game);
+        GunSelectController.CanvasGroup.alpha = 0;
+    }
+
+    [ButtonMethod()]
+    public void SetUICamera()
+    {
+        ToggleCamera(Cam.UI);
+        GunSelectController.CanvasGroup.alpha = 1;
+    }
+    
+    #endif
 }

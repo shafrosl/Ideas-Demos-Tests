@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Debug = Utility.Debug;
 using Random = UnityEngine.Random;
 
 public class Target : MonoBehaviour, IBulletHole
@@ -27,6 +28,7 @@ public class Target : MonoBehaviour, IBulletHole
         holeRenderer.sprite = Holes[randHole];
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount + TargetRenderer.sortingOrder;
+        GameManager.Instance.Holes.Add(holeObj);
         return UniTask.CompletedTask;
     }
 }

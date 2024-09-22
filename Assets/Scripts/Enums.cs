@@ -7,7 +7,6 @@ public enum GunPart
 
 /// <summary>
 /// fire rate = bullets per second
-/// reload speed = how many times faster it takes to reload
 /// recoil control = 0 no control, 10 absolute control
 /// magazine size = in groups of 5 (eg. 1 is 1 x 5 = 5)
 ///
@@ -23,7 +22,6 @@ public enum Modifier
 {
     Null = 0,
     FireRate = 1,
-    ReloadSpeed = 2,
     RecoilControl = 3,
     MagazineSize = 4,
     
@@ -41,4 +39,11 @@ public enum Tier
     One = 1,
     Two = 2,
     Three = 3
+}
+
+public enum Cam
+{
+    Null = 0,
+    UI = 1,
+    Game = 2
 }
