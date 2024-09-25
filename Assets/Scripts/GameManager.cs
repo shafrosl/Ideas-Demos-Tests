@@ -19,6 +19,15 @@ public class GameManager : MonoBehaviour
     public PlayerStats PlayerStats;
     public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
     public List<GameObject> Holes = new();
+    public GameObject Sparks;
+
+    [Header("Game Colors")] 
+    public Color Black;
+    public Color White;
+    public Color Red;
+    public Color Green;
+    public Color Blue;
+    public Color Yellow;
     
     [Header("Game States")]
     public bool GameStarted;
@@ -27,6 +36,7 @@ public class GameManager : MonoBehaviour
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;
     [ConditionalField(nameof(PlayerController), true), SerializeField] public Player PlayerController;
+    [ConditionalField(nameof(HUDController), true), SerializeField] public HUDController HUDController;
     
     public bool IsReady => Instance && GunData && GemData;
     
@@ -107,9 +117,9 @@ public class GameManager : MonoBehaviour
         await ToggleCursorLock(true);
         PlayerStats = new PlayerStats(PlayerStats);
         await GunSelectController.StartGame();
+        await PlayerController.SetData();
         await GunSelectController.ToggleScreen(false, false);
         PlayerController.ResetState();
-        PlayerController.SetData();
     }
 
     public void ToggleGamePaused(bool paused)

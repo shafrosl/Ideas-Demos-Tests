@@ -374,6 +374,82 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Bullet
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 269
+        width: 67
+        height: 154
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb7b78aa871904590be90a479c1acc54
+      internalID: 1653611194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spark
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 166
+        width: 158
+        height: 158
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 26.490417, y: 14.337799}
+        - {x: 79, y: 7.7670746}
+        - {x: 79, y: -1.4367065}
+        - {x: 26.881104, y: -26.146896}
+        - {x: 19.26236, y: -79}
+        - {x: 9.979767, y: -77.73656}
+        - {x: -19.021912, y: -25.799896}
+        - {x: -79, y: -15.444412}
+        - {x: -79, y: -5.4746857}
+        - {x: -19.021912, y: 21.513245}
+        - {x: -17.819092, y: 76.345764}
+        - {x: -9.359375, y: 79}
+        - {x: 18.961884, y: 36.173645}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f389bae8bbcc4f409cb6951d833d66e
+      internalID: -1395288835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Particle
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 347
+        width: 34
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40e4f830427d2450285774b8f21ebaea
+      internalID: 1201629189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -386,6 +462,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Arrow: 98269136
+      Bullet: 1653611194
       BulletHole1: -1206062018
       BulletHole2: -1897505686
       GemColor1: 2086731720
@@ -394,6 +471,8 @@ TextureImporter:
       GemColor4: -726252536
       GemColor5: -1778347747
       GemFrame: 1367337832
+      Particle: 1201629189
+      Spark: -1395288835
       Trash: 1656900249
       WhiteBar: 249959071
       X: -933248005

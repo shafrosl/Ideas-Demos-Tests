@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class Target : MonoBehaviour, IBulletHole
 {
     public SpriteRenderer TargetRenderer;
+    public Rigidbody Rigidbody;
     public Sprite[] Holes;
     private int holeCount;
 
@@ -18,7 +19,7 @@ public class Target : MonoBehaviour, IBulletHole
         {
             transform =
             {
-                parent = transform,
+                parent = TargetRenderer.transform,
                 localPosition = new Vector3(position.x, position.y, 0),
                 localEulerAngles = new Vector3(0, 0, randZ)
             }
@@ -29,6 +30,9 @@ public class Target : MonoBehaviour, IBulletHole
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount + TargetRenderer.sortingOrder;
         GameManager.Instance.Holes.Add(holeObj);
+        var spark = Instantiate(GameManager.Instance.Sparks, holeObj.transform);
+        if (spark.TryGetComponent(out ParticleSystemRenderer ps)) ps.sortingOrder = holeRenderer.sortingOrder + 1;
+        Rigidbody.AddForce(0, 0, 100 * GameManager.Instance.PlayerController.Damage);
         return UniTask.CompletedTask;
     }
 }
