@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using System.Threading;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
-using Unity.VisualScripting;
 using UnityEngine;
 using Debug = Utility.Debug;
 
@@ -132,6 +132,7 @@ public class Player : MonoBehaviour, IMovement, IGun
         }
     }
 
+    [SerializeReference] public List<GameObject> results3List = new();
     public void OnShoot()
     {
         if (Input.GetMouseButtonDown(0)) isShooting = true;
@@ -156,21 +157,23 @@ public class Player : MonoBehaviour, IMovement, IGun
                 AnimateShootingHands();
                 CinemachineImpulseSource.GenerateImpulseWithForce(recoilControl);
                 numOfBulletsCurrent--;
+                GameManager.Instance.PlayerStats.Score.TotalShots++;
                 GameManager.Instance.HUDController.SetCurrent(numOfBulletsCurrent);
                 GameManager.Instance.HUDController.AnimateShot();
-                Ray ray = new Ray(BulletExit.position, GameManager.Instance.GameCamera.transform.forward);
-                var results = new RaycastHit2D[16];
-                var size = Physics2D.GetRayIntersectionNonAlloc(ray, results);
+                var ray = new Ray(BulletExit.position, GameManager.Instance.GameCamera.transform.forward);
+                var results = new RaycastHit[16];
+                var size = Physics.RaycastNonAlloc(ray, results);
+                System.Array.Sort(results, (a, b) => (a.distance.CompareTo(b.distance)));
+                DOTween.To(() => pitch, x => pitch = x, pitch - recoilControl, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
                 if (size < 1) return;
                 foreach (var result in results)
                 {
                     if (result.collider is null) continue;
                     if (!result.collider.CompareTag("Target")) continue;
-                    if (!result.transform.parent.TryGetComponent(out Target target)) continue;
-                    target.InstantiateHole(target.transform.GetChild(0).InverseTransformPoint(result.point));
+                    if (!result.collider.transform.parent.TryGetComponent(out Target target)) continue;
+                    target.InstantiateHole(result.transform.InverseTransformPoint(result.point), result.collider.transform.parent.GetComponent<SpriteRenderer>(), target.transform.localPosition);
                     break;
                 }
-                DOTween.To(() => pitch, x => pitch = x, pitch - recoilControl, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             }
         }
         if (Input.GetMouseButtonUp(0)) isShooting = false;

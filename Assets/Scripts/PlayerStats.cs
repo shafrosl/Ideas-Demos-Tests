@@ -11,7 +11,8 @@ public class PlayerStats
     public BodyObject CurrBodyObj;
     public BarrelObject CurrBarrelObj;
     public StockObject CurrStockObj;
-
+    public Score Score;
+    
     public PlayerStats() => GunStats = new();
     
     public PlayerStats(PlayerStats playerStats)
@@ -20,6 +21,7 @@ public class PlayerStats
         CurrBarrelObj = playerStats.CurrBarrelObj;
         CurrStockObj = playerStats.CurrStockObj;
         GunStats = new();
+        Score = new();
     }
 
     public UniTask SetStats(List<DataObject> stats)
@@ -31,4 +33,14 @@ public class PlayerStats
 
         return UniTask.CompletedTask;
     }
+}
+
+[Serializable]
+public class Score
+{
+    [SerializeField] public int HeadShots;
+    [SerializeField] public int BodyShots;
+    [SerializeField] public int TotalShots;
+    public int GetMisses() => TotalShots - (HeadShots + BodyShots);
+    public double GetAccuracy() => (double)(HeadShots + BodyShots) / TotalShots;
 }

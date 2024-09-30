@@ -13,7 +13,12 @@ public interface IGun
     public void OnReload();
 }
 
+public interface IScore
+{
+    public void AddScore();
+}
+
 public interface IBulletHole
 {
-    public UniTask InstantiateHole(Vector3 position);
+    public UniTask InstantiateHole(Vector3 position, SpriteRenderer SR);
 }
