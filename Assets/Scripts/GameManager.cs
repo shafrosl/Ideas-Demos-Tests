@@ -19,8 +19,7 @@ public class GameManager : MonoBehaviour
     public PlayerStats PlayerStats;
     public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
     public List<GameObject> Holes = new();
-    public GameObject Sparks;
-
+    
     [Header("Game Colors")] 
     public Color Black;
     public Color White;
@@ -28,6 +27,10 @@ public class GameManager : MonoBehaviour
     public Color Green;
     public Color Blue;
     public Color Yellow;
+
+    [Header("Shared Assets")] 
+    public Sprite[] BulletHoles;
+    public GameObject Sparks;
     
     [Header("Game States")]
     public bool GameStarted;
@@ -37,6 +40,7 @@ public class GameManager : MonoBehaviour
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;
     [ConditionalField(nameof(PlayerController), true), SerializeField] public Player PlayerController;
     [ConditionalField(nameof(HUDController), true), SerializeField] public HUDController HUDController;
+    [ConditionalField(nameof(PoolController), true), SerializeField] public PoolController PoolController;
     
     public bool IsReady => Instance && GunData && GemData;
     

@@ -20,5 +20,5 @@ public interface IScore
 
 public interface IBulletHole
 {
-    public UniTask InstantiateHole(Vector3 position, SpriteRenderer SR);
+    public UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR);
 }

@@ -10,6 +10,7 @@ using Debug = Utility.Debug;
 public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform BulletExit;
+    public ParticleSystem MuzzleFlash;
     public CinemachineVirtualCamera Cinemachine;
     public CinemachineImpulseSource CinemachineImpulseSource;
 
@@ -156,6 +157,7 @@ public class Player : MonoBehaviour, IMovement, IGun
                 internalFireRateCooldownTimer = fireRateCooldownTimer;
                 AnimateShootingHands();
                 CinemachineImpulseSource.GenerateImpulseWithForce(recoilControl);
+                MuzzleFlash.Play();
                 numOfBulletsCurrent--;
                 GameManager.Instance.PlayerStats.Score.TotalShots++;
                 GameManager.Instance.HUDController.SetCurrent(numOfBulletsCurrent);
@@ -171,7 +173,7 @@ public class Player : MonoBehaviour, IMovement, IGun
                     if (result.collider is null) continue;
                     if (!result.collider.CompareTag("Target")) continue;
                     if (!result.collider.transform.parent.TryGetComponent(out Target target)) continue;
-                    target.InstantiateHole(result.transform.InverseTransformPoint(result.point), result.collider.transform.parent.GetComponent<SpriteRenderer>(), target.transform.localPosition);
+                    target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), result.collider.transform.parent.GetComponent<SpriteRenderer>(), target.transform.localPosition);
                     break;
                 }
             }

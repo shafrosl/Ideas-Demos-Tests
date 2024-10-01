@@ -4,9 +4,9 @@ using Debug = Utility.Debug;
 
 public class WallTarget : Target
 {
-    public override UniTask InstantiateHole(Vector3 position, SpriteRenderer SR, Vector2 offset)
+    public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
     {
-        var randHole = Random.Range(0, TargetController.Holes.Length);
+        var randHole = Random.Range(0, GameManager.Instance.BulletHoles.Length);
         var randZ = Random.Range(0, 360);
         var holeObj = new GameObject("Hole")
         {
@@ -20,7 +20,7 @@ public class WallTarget : Target
         };
 
         var holeRenderer = holeObj.AddComponent<SpriteRenderer>();
-        holeRenderer.sprite = TargetController.Holes[randHole];
+        holeRenderer.sprite = GameManager.Instance.BulletHoles[randHole];
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount + SR.sortingOrder;
         GameManager.Instance.Holes.Add(holeObj);

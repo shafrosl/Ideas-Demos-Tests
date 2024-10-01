@@ -1,7 +1,19 @@
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+
 public class TargetBody : Target
 {
-    public override void AddScore()
+    protected override void TargetUpdate()
     {
-        GameManager.Instance.PlayerStats.Score.BodyShots++;
+        if (TargetController.BodyShot && !TargetController.BodyShot.IsCounting) TargetController.BodyShot = null;
     }
+
+    public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
+    {
+        if (!TargetController.BodyShot) TargetController.BodyShot = GameManager.Instance.PoolController.InstantiateHit(position);
+        else TargetController.BodyShot.IncreaseSize();
+        return base.InstantiateHole(position, worldPosition, SR, offset);
+    }
+
+    public override void AddScore() => GameManager.Instance.PlayerStats.Score.BodyShots++;
 }
