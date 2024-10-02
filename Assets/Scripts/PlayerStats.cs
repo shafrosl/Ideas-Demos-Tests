@@ -12,6 +12,7 @@ public class PlayerStats
     public BarrelObject CurrBarrelObj;
     public StockObject CurrStockObj;
     public Score Score;
+    public int Health;
     
     public PlayerStats() => GunStats = new();
     
@@ -22,6 +23,7 @@ public class PlayerStats
         CurrStockObj = playerStats.CurrStockObj;
         GunStats = new();
         Score = new();
+        Health = 5;
     }
 
     public UniTask SetStats(List<DataObject> stats)
@@ -32,6 +34,24 @@ public class PlayerStats
         }
 
         return UniTask.CompletedTask;
+    }
+
+    public bool Damage()
+    {
+        if (Health < 1) return false;
+        Health -= 1;
+        if (Health < 4) GameManager.Instance.HUDController.SwitchTextColor(true);
+        return Health != 0;
+
+    }
+
+    public bool Heal()
+    {
+        if (Health > 4) return false;
+        Health += 1;
+        if (Health < 4) GameManager.Instance.HUDController.SwitchTextColor(false);
+        return Health <= 5;
+
     }
 }
 

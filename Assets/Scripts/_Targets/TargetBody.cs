@@ -10,7 +10,7 @@ public class TargetBody : Target
 
     public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
     {
-        if (!TargetController.BodyShot) TargetController.BodyShot = GameManager.Instance.PoolController.InstantiateHit(position);
+        if (!TargetController.BodyShot) TargetController.BodyShot = GameManager.Instance.PoolController.InstantiateHit(worldPosition);
         else TargetController.BodyShot.IncreaseSize();
         return base.InstantiateHole(position, worldPosition, SR, offset);
     }

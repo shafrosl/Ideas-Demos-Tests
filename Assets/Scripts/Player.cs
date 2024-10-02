@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
@@ -12,11 +13,14 @@ public class Player : MonoBehaviour, IMovement, IGun
     public Transform BulletExit;
     public ParticleSystem MuzzleFlash;
     public CinemachineVirtualCamera Cinemachine;
-    public CinemachineImpulseSource CinemachineImpulseSource;
+    public CinemachineImpulseSource RecoilImpulse;
+    public CinemachineImpulseSource HitImpulse;
 
-    [Header("Hands")] 
+    [Header("Sprites")] 
+    public Transform PlayerSpriteGroup;
     public SpriteRenderer LeftHand;
     public SpriteRenderer RightHand;
+    public SpriteRenderer[] DeathOverlay;
 
     [Header("Player State")] 
     public bool isHidden;
@@ -24,6 +28,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     public bool isShooting;
     public bool isReloading;
     public bool isEmpty;
+    public bool isHit;
     public bool lockMovement;
     
     [Header("Movement Settings")]
@@ -79,6 +84,7 @@ public class Player : MonoBehaviour, IMovement, IGun
         Hide();
         OnShoot();
         OnReload();
+        OnHit();
         CheckMagazine();
     }
     
@@ -109,7 +115,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             isHiding = true;
             
             DOTween.To(() => pitch, x => pitch = x, 20f, 0.25f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-            await transform.DOLocalMoveY(-0.2f, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            await PlayerSpriteGroup.DOLocalMoveY(-0.2f, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             isHiding = false;
             isHidden = true;
         }
@@ -128,12 +134,11 @@ public class Player : MonoBehaviour, IMovement, IGun
             isHiding = true;
             
             DOTween.To(() => pitch, x => pitch = x, 0f, 0.25f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-            await transform.DOLocalMoveY(0, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            await PlayerSpriteGroup.DOLocalMoveY(0, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             isHiding = false;
         }
     }
 
-    [SerializeReference] public List<GameObject> results3List = new();
     public void OnShoot()
     {
         if (Input.GetMouseButtonDown(0)) isShooting = true;
@@ -155,18 +160,10 @@ public class Player : MonoBehaviour, IMovement, IGun
             if (isShooting)
             {
                 internalFireRateCooldownTimer = fireRateCooldownTimer;
-                AnimateShootingHands();
-                CinemachineImpulseSource.GenerateImpulseWithForce(recoilControl);
-                MuzzleFlash.Play();
-                numOfBulletsCurrent--;
-                GameManager.Instance.PlayerStats.Score.TotalShots++;
-                GameManager.Instance.HUDController.SetCurrent(numOfBulletsCurrent);
-                GameManager.Instance.HUDController.AnimateShot();
                 var ray = new Ray(BulletExit.position, GameManager.Instance.GameCamera.transform.forward);
                 var results = new RaycastHit[16];
                 var size = Physics.RaycastNonAlloc(ray, results);
                 System.Array.Sort(results, (a, b) => (a.distance.CompareTo(b.distance)));
-                DOTween.To(() => pitch, x => pitch = x, pitch - recoilControl, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
                 if (size < 1) return;
                 foreach (var result in results)
                 {
@@ -176,12 +173,22 @@ public class Player : MonoBehaviour, IMovement, IGun
                     target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), result.collider.transform.parent.GetComponent<SpriteRenderer>(), target.transform.localPosition);
                     break;
                 }
+                
+                AnimateShootingHands();
+                RecoilImpulse.GenerateImpulseWithForce(recoilControl);
+                MuzzleFlash.Play();
+                numOfBulletsCurrent--;
+                GameManager.Instance.PlayerStats.Score.TotalShots++;
+                GameManager.Instance.HUDController.SetCurrent(numOfBulletsCurrent);
+                GameManager.Instance.HUDController.AnimateShot();
+                DOTween.To(() => pitch, x => pitch = x, pitch - recoilControl, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+
             }
         }
         if (Input.GetMouseButtonUp(0)) isShooting = false;
     }
 
-    public void OnReload()
+    public async void OnReload()
     {
         if (isHidden) isReloading = true;
         if (isReloading)
@@ -190,6 +197,47 @@ public class Player : MonoBehaviour, IMovement, IGun
             numOfBulletsCurrent = numOfBulletsTotal;
             GameManager.Instance.HUDController.SetCurrent(numOfBulletsCurrent);
         }
+    }
+
+    public async void OnHit()
+    {
+        if (!isHit) return;
+        isHit = false;
+        if (!isHidden)
+        {
+            if (GameManager.Instance.PlayerStats.Damage())
+            {
+                // play hit sfx
+                HitImpulse.GenerateImpulseWithForce(0.15f);
+                await OverlaySelector(true);
+            }
+        }
+        else
+        {
+            // play close miss sfx
+        }
+    }
+
+    public async void OnHeal()
+    {
+        if (GameManager.Instance.PlayerStats.Heal()) await OverlaySelector(false);
+    }
+
+    public async UniTask<UniTask> OverlaySelector(bool show)
+    {
+        var results = (DeathOverlay.Where(SR => show ? !SR.gameObject.activeSelf : SR.gameObject.activeSelf)).ToArray();
+        var i = Random.Range(0, results.Length);
+        for (var tries = 0; i < 20; i++)
+        {
+            if (show ? results[i].gameObject.activeSelf : !results[i].gameObject.activeSelf) i = Random.Range(0, results.Length);
+            else
+            {
+                results[i].gameObject.SetActive(show);
+                await results[i].DOFade(show ? 1 : 0, 0.2f);
+                break;
+            }
+        }
+        return UniTask.CompletedTask;
     }
 
     private async void AnimateShootingHands()

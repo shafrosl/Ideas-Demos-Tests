@@ -9,7 +9,6 @@ public class PoolController : MonoBehaviour
 
     public TextPopUp InstantiateHit(Vector3 position)
     {
-        if (position.y < 5.5f) position = new Vector3(position.x, 2.5f, position.z);
         foreach (var pop in TextPopUps.Where(pop => !pop.gameObject.activeSelf))
         {
             pop.Instantiate(position);

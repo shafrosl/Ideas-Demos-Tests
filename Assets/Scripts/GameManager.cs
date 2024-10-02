@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
     }
 
     [ButtonMethod()]
-    public void SetUICamera()
+    public void SetDefaultCamera()
     {
         ToggleCamera(Cam.UI);
         GunSelectController.CanvasGroup.alpha = 1;

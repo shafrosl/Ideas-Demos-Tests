@@ -47,11 +47,11 @@ TagManager:
   - name: Environment
     uniqueID: 1884763309
     locked: 0
-  - name: Text Pop Up
-    uniqueID: 1638337745
-    locked: 0
   - name: In Front
     uniqueID: 3717090969
+    locked: 0
+  - name: Text Pop Up
+    uniqueID: 1638337745
     locked: 0
   - name: Player
     uniqueID: 1849702651

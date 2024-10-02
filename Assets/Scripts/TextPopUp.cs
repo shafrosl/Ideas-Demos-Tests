@@ -30,10 +30,10 @@ public class TextPopUp : MonoBehaviour
         transform.localScale = Vector3.one;
         transform.position = position;
         transform.parent = GameManager.Instance.PoolController.transform;
-        textPopUpCountdown = 2.5f;
+        textPopUpCountdown = 1.25f;
         var distance = Vector3.Distance(transform.position, GameManager.Instance.PlayerController.transform.position);
         Debug.Log("how far? " + distance);
-        if (distance > MaxDistance)
+        if (distance >= MaxDistance)
         {
             transform.localScale = new Vector3(1 + (distance / 100), 1 + (distance / 100), 1 + (distance / 100));
         }
@@ -42,11 +42,13 @@ public class TextPopUp : MonoBehaviour
         return this;
     }
 
-    public virtual void IncreaseSize()
+    public virtual async void IncreaseSize()
     {
+        textPopUpCountdown = 1.25f;
         transform.DOShakePosition(0.1f, 0.25f, 3, 10);
         transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
-        textPopUpCountdown = 2.5f;
+        await DOTween.To(() => TextRenderer.color, x => TextRenderer.color = x, GameManager.Instance.Red, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        DOTween.To(() => TextRenderer.color, x => TextRenderer.color = x, new Color(0.01176471f, 0.01176471f, 0.01176471f), 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
     }
 
     private async void FadeOut()
