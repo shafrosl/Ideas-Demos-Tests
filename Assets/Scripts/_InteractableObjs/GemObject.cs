@@ -66,7 +66,7 @@ public class GemObject : DraggableObject
                 if (results[i].gameObject.CompareTag("Slot") && results[i].gameObject.TryGetComponent(out GunGemSlot ggslot))
                 {
                     ggslot.updateData = false;
-                    transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                    transform.localScale = VectorExtensions.CreateV3(0.8f);
                     var dataScreen = GameManager.Instance.GunSelectController.GunDataScreen;
                     await dataScreen.RemoveData(this);
                     var found = gemsGuS.FindIndex(x => x.ObjID == ObjID);
@@ -74,7 +74,7 @@ public class GemObject : DraggableObject
                 }
                 else if (results[i].gameObject.CompareTag("Slot") && results[i].gameObject.TryGetComponent(out GemSlot gSlot))
                 {
-                    transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                    transform.localScale = VectorExtensions.CreateV3(0.8f);
                 }
             }
         }
@@ -108,7 +108,7 @@ public class GemObject : DraggableObject
             {
                 if (results[i].gameObject.CompareTag("Slot") && results[i].gameObject.TryGetComponent(out GunGemSlot ggSlot))
                 {
-                    transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                    transform.localScale = VectorExtensions.CreateV3(0.8f);
                     if (lastCachedGemSlot is GunGemSlot && lastCachedGemSlot != ggSlot)
                     {
                         gemsGuS.Add(this);
@@ -127,7 +127,7 @@ public class GemObject : DraggableObject
                 }
                 else if (results[i].gameObject.CompareTag("Slot") && results[i].gameObject.TryGetComponent(out GemSlot gSlot))
                 {
-                    transform.localScale = new Vector3(1.65f, 1.65f, 1.65f);
+                    transform.localScale = VectorExtensions.CreateV3(1.65f);
                     if (!gemsGeS.Find(x => x.ObjID == ObjID)) gemsGeS.Add(this);
                     lastCachedGemSlot = gSlot;
                 }
@@ -139,13 +139,13 @@ public class GemObject : DraggableObject
             if (lastCachedGemSlot is GunGemSlot)
             {
                 var gemsGuS = GameManager.Instance.GunSelectController.GunSelectScreen.Gems;
-                transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                transform.localScale = VectorExtensions.CreateV3(0.8f);
                 await GameManager.Instance.GunSelectController.GunDataScreen.AddData(this);
                 gemsGuS.Add(this);
             }
             else if (lastCachedGemSlot is GemSlot)
             {
-                transform.localScale = new Vector3(1.65f, 1.65f, 1.65f);
+                transform.localScale = VectorExtensions.CreateV3(1.65f);
             }
         }
     }

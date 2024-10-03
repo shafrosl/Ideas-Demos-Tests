@@ -1,13 +1,18 @@
-using MyBox;
+using System;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI.Extensions;
 using Debug = Utility.Debug;
+using Random = UnityEngine.Random;
 
 public class TargetController : MonoBehaviour
 {
     public Transform BulletExit;
     public Rigidbody Rigidbody;
     public ParticleSystem MuzzleFlash;
+
+    [Header("States")] 
+    public bool isMoving;
 
     [Header("Settings")] 
     [Range(0.0f, 1.0f)] public float Chance;
@@ -20,6 +25,12 @@ public class TargetController : MonoBehaviour
     public TextPopUp BodyShot;
     
     private bool inShootingRange => Vector3.Distance(transform.position, GameManager.Instance.PlayerController.transform.position) < DistanceToShoot;
+
+
+    private void Start()
+    {
+        MovePingPongX(new Vector2(-10, 10), speedB: 8);
+    }
 
     private void Update()
     {
@@ -45,7 +56,34 @@ public class TargetController : MonoBehaviour
         {
             GameManager.Instance.PlayerController.isHit = true;
         }
-        
+    }
+
+    private async UniTask<UniTask> MoveLinearX(float xDir, float speed = 2)
+    {
+        await transform.parent.DOMoveX(xDir, speed);
+        return UniTask.CompletedTask;
+    }
+    
+    private async UniTask<UniTask> MoveLinearZ(float xDir, float speed = 2)
+    {
+        await transform.parent.DOMoveZ(xDir, speed);
+        return UniTask.CompletedTask;
+    }
+
+    private async void MovePingPongX(Vector2 xDirs, float? speedA = null, float? speedB = null, int? delayMs = null)
+    {
+        await MoveLinearX(xDirs.x, speedA ?? 2);
+        await UniTask.Delay(delayMs ?? 0);
+        await MoveLinearX(xDirs.y, speedB ?? 2);
+        MovePingPongX(xDirs, speedA, speedB);
+    }
+    
+    private async void MovePingPongZ(Vector2 xDirs, float? speedA = null, float? speedB = null, int? delayMs = null)
+    {
+        await MoveLinearZ(xDirs.x, speedA ?? 2);
+        await UniTask.Delay(delayMs ?? 0);
+        await MoveLinearZ(xDirs.y, speedB ?? 2);
+        MovePingPongZ(xDirs, speedA, speedB);
     }
 
     private void OnDrawGizmos()

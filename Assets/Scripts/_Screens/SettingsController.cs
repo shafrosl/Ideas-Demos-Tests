@@ -43,9 +43,9 @@ public class SettingsController : BaseController
         if (CanvasGroup.alpha == 0)
         {
             if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = true;
-            GameManager.Instance.ToggleCamera(Cam.UI);
             await CanvasGroup.DOFade(1, .5f).SetUpdate(true).WithCancellation(ct);
             CanvasGroup.interactable = CanvasGroup.blocksRaycasts = true;
+            GameManager.Instance.ToggleCamera(Cam.UI);
             GameManager.Instance.ToggleCursorLock(false);
             GameManager.Instance.ToggleGamePaused(true);
             Time.timeScale = 0;
@@ -71,9 +71,9 @@ public class SettingsController : BaseController
         if (show)
         {
             if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = true;
-            GameManager.Instance.ToggleCamera(Cam.UI);
             await CanvasGroup.DOFade(1, .5f).SetUpdate(true).WithCancellation(ct);
             CanvasGroup.interactable = CanvasGroup.blocksRaycasts = true;
+            GameManager.Instance.ToggleCamera(Cam.UI);
             GameManager.Instance.ToggleCursorLock(false);
             GameManager.Instance.ToggleGamePaused(true);
             Time.timeScale = 0;
