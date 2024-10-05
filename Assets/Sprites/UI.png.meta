@@ -450,6 +450,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Heart
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 213
+        width: 112
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9ceccaa7a827418fa7960a5cdd0bdfc
+      internalID: 149837254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -471,6 +492,7 @@ TextureImporter:
       GemColor4: -726252536
       GemColor5: -1778347747
       GemFrame: 1367337832
+      Heart: 149837254
       Particle: 1201629189
       Spark: -1395288835
       Trash: 1656900249

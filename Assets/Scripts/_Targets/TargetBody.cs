@@ -5,15 +5,17 @@ public class TargetBody : Target
 {
     protected override void TargetUpdate()
     {
-        if (TargetController.BodyShot && !TargetController.BodyShot.IsCounting) TargetController.BodyShot = null;
+        if (TargetController is not TargetController tc) return;
+        if (tc.BodyShot && !tc.BodyShot.IsCounting) tc.BodyShot = null;
     }
 
     public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
     {
-        if (!TargetController.BodyShot) TargetController.BodyShot = GameManager.Instance.PoolController.InstantiateHit(worldPosition);
-        else TargetController.BodyShot.IncreaseSize();
+        if (TargetController is not TargetController tc) return UniTask.CompletedTask;
+        if (!tc.BodyShot) tc.BodyShot = GameManager.Instance.PoolController.InstantiateHit(worldPosition);
+        else tc.BodyShot.IncreaseSize();
         return base.InstantiateHole(position, worldPosition, SR, offset);
     }
 
-    public override void AddScore() => GameManager.Instance.PlayerStats.Score.BodyShots++;
+    public override void OnHit() => GameManager.Instance.PlayerStats.Score.BodyShots++;
 }

@@ -42,7 +42,6 @@ public class PlayerStats
         Health -= 1;
         if (Health < 4) GameManager.Instance.HUDController.SwitchTextColor(true);
         return Health != 0;
-
     }
 
     public bool Heal()
@@ -51,7 +50,6 @@ public class PlayerStats
         Health += 1;
         if (Health < 4) GameManager.Instance.HUDController.SwitchTextColor(false);
         return Health <= 5;
-
     }
 }
 

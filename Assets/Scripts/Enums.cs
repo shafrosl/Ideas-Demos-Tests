@@ -47,3 +47,11 @@ public enum Cam
     UI = 1,
     Game = 2
 }
+
+public enum Axis
+{
+    Z = 0,
+    X = 1,
+    XZ = 2,
+    ZX = 3
+}

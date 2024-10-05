@@ -1,0 +1,12 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+
+public class HealthKit : PickUp
+{
+    public override async void OnHit()
+    {
+        GameManager.Instance.PlayerController.OnHeal();
+        await SR.DOFade(0, 0.2f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        Destroy(gameObject);
+    }
+}

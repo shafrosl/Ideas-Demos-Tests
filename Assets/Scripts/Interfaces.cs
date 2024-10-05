@@ -15,7 +15,7 @@ public interface IGun
 
 public interface IScore
 {
-    public void AddScore();
+    public void OnHit();
 }
 
 public interface IBulletHole

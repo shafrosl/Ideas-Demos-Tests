@@ -30,9 +30,9 @@ public class TextPopUp : MonoBehaviour
         transform.localScale = Vector3.one;
         transform.position = position;
         transform.parent = GameManager.Instance.PoolController.transform;
+        transform.LookAt(GameManager.Instance.PlayerController.transform);
         textPopUpCountdown = 1.25f;
         var distance = Vector3.Distance(transform.position, GameManager.Instance.PlayerController.transform.position);
-        Debug.Log("how far? " + distance);
         if (distance >= MaxDistance)
         {
             transform.localScale = new Vector3(1 + (distance / 100), 1 + (distance / 100), 1 + (distance / 100));

@@ -51,7 +51,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     public void ResetState() => isHidden = isHiding = isShooting = isReloading = lockMovement = false;
     private void CheckMagazine() => isEmpty = numOfBulletsCurrent <= 0;
 
-    public UniTask SetData()
+    public async UniTask<UniTask> SetData(int hearts = 5)
     {
         foreach (var stat in GameManager.Instance.PlayerStats.GunStats)
         {
@@ -74,6 +74,7 @@ public class Player : MonoBehaviour, IMovement, IGun
         
         GameManager.Instance.HUDController.SetTotal(numOfBulletsTotal);
         GameManager.Instance.HUDController.SetCurrent(numOfBulletsTotal);
+        await GameManager.Instance.HUDController.ResetHearts(hearts);
         return UniTask.CompletedTask;
     }
     
@@ -209,6 +210,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             {
                 // play hit sfx
                 HitImpulse.GenerateImpulseWithForce(0.15f);
+                GameManager.Instance.HUDController.Hit();
                 await OverlaySelector(true);
             }
         }
@@ -220,7 +222,11 @@ public class Player : MonoBehaviour, IMovement, IGun
 
     public async void OnHeal()
     {
-        if (GameManager.Instance.PlayerStats.Heal()) await OverlaySelector(false);
+        if (GameManager.Instance.PlayerStats.Heal())
+        {
+            GameManager.Instance.HUDController.Heal();
+            await OverlaySelector(false);
+        }
     }
 
     public async UniTask<UniTask> OverlaySelector(bool show)

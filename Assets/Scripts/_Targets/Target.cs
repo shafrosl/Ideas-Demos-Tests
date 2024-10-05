@@ -3,9 +3,10 @@ using MyBox;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Target : MonoBehaviour, IBulletHole, IScore
 {
-    [ConditionalField(nameof(TargetController), true), SerializeField] public TargetController TargetController;
+    [ConditionalField(nameof(TargetController), true), SerializeField] public BaseTargetController TargetController;
     protected int holeCount;
 
     public virtual UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
@@ -30,14 +31,18 @@ public class Target : MonoBehaviour, IBulletHole, IScore
         holeRenderer.sortingOrder = ++holeCount + SR.sortingOrder;
         GameManager.Instance.Holes.Add(holeObj);
         var spark = Instantiate(GameManager.Instance.Sparks, holeObj.transform);
-        if (spark.TryGetComponent(out ParticleSystemRenderer ps)) ps.sortingOrder = holeRenderer.sortingOrder + 1;
+        if (spark.TryGetComponent(out ParticleSystemRenderer ps))
+        {
+            spark.transform.localEulerAngles = TargetController.PositionDotValue < 0 ? new Vector3(0, 0, 0) : new Vector3(0, 180, 0);
+            ps.sortingOrder = holeRenderer.sortingOrder + 1;
+        }
         TargetController.Rigidbody.AddForce(0, 0, 100 * GameManager.Instance.PlayerController.Damage);
-        AddScore();
+        OnHit();
         return UniTask.CompletedTask;
     }
 
     public virtual UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR) => InstantiateHole(position, worldPosition, SR, Vector2.zero);
-    public virtual void AddScore() { }
+    public virtual void OnHit() { }
     protected virtual void TargetUpdate() { }
     private void Update() => TargetUpdate();
 }

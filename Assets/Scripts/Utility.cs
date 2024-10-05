@@ -200,13 +200,6 @@ namespace Utility
                 b ?? color.b,
                 a ?? color.a);
         }
-        
-        public static Vector2 RandomVector2(int xMinRange, int xMaxRange, int yMinRange, int yMaxRange)
-        {
-            var randX = Random.Range(xMinRange, xMaxRange);
-            var randY = Random.Range(yMinRange, yMaxRange);
-            return new Vector2(randX, randY);
-        }
     }
 
     public static class EnumExtensions
@@ -246,6 +239,11 @@ namespace Utility
                 newText.Append(name[i]);
             }
             return newText.ToString();
+        }
+
+        public static IEnumerable<T> GetValues<T>() 
+        {
+            return Enum.GetValues(typeof(T)).Cast<T>();
         }
     }
     

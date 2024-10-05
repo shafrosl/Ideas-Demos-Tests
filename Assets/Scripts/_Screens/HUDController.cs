@@ -4,11 +4,13 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utility;
 
 public class HUDController : BaseController
 {
     public TextMeshProUGUI TotalNum, CurrNum, Slash;
     public Image Bullet;
+    public Image[] Hearts;
     private bool SwitchColor;
 
     private CancellationTokenSource ctx = new();
@@ -35,5 +37,42 @@ public class HUDController : BaseController
     {
         SwitchColor = switchColor;
         if (!GameManager.Instance.PlayerController.isShooting) CurrNum.color = TotalNum.color = Slash.color = SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black;
+    }
+
+    public async void Hit()
+    {
+        for (var i = 0; i < Hearts.Length; i++)
+        {
+            if (!Hearts[i].gameObject.activeSelf) continue;
+            await Hearts[i].transform.DOShakeRotation(0.75f, new Vector3(0, 0, 15), 20, 2, true, ShakeRandomnessMode.Harmonic).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            await Hearts[i].DOFade(0, 1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            Hearts[i].gameObject.SetActive(false);
+            break;
+        }
+    }
+
+    public async void Heal()
+    {
+        for (var i = 0; i < Hearts.Length; i++)
+        {
+            if (Hearts[i].gameObject.activeSelf) continue;            
+            Hearts[i].gameObject.SetActive(true);
+            await Hearts[i].DOFade(1, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            break;
+        }
+    }
+
+    public UniTask ResetHearts(int num = 5)
+    {
+        var numOfHearts = num;
+        foreach (var heart in Hearts)
+        {
+            heart.gameObject.SetActive(true);
+            heart.color.Modify(a: 1);
+            numOfHearts--;
+            if (numOfHearts == 0) break;
+        }
+        
+        return UniTask.CompletedTask;
     }
 }
