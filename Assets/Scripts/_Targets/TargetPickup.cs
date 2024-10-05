@@ -1,8 +1,8 @@
 public class TargetPickup : Target
 {
-    public override async void OnHit()
+    public override void OnHit()
     {
-        if (TargetController is not HealthKit tc) return;
+        if (TargetController is not PickUp tc) return;
         tc.OnHit();
     }
 }

@@ -13,6 +13,7 @@ public class PlayerStats
     public StockObject CurrStockObj;
     public Score Score;
     public int Health;
+    public int FullHealth;
     
     public PlayerStats() => GunStats = new();
     
@@ -23,7 +24,7 @@ public class PlayerStats
         CurrStockObj = playerStats.CurrStockObj;
         GunStats = new();
         Score = new();
-        Health = 5;
+        FullHealth = Health = 5;
     }
 
     public UniTask SetStats(List<DataObject> stats)
@@ -48,7 +49,7 @@ public class PlayerStats
     {
         if (Health > 4) return false;
         Health += 1;
-        if (Health < 4) GameManager.Instance.HUDController.SwitchTextColor(false);
+        if (Health > 3) GameManager.Instance.HUDController.SwitchTextColor(false);
         return Health <= 5;
     }
 }

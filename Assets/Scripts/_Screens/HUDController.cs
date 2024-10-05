@@ -36,7 +36,8 @@ public class HUDController : BaseController
     public void SwitchTextColor(bool switchColor)
     {
         SwitchColor = switchColor;
-        if (!GameManager.Instance.PlayerController.isShooting) CurrNum.color = TotalNum.color = Slash.color = SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black;
+        TotalNum.color = Slash.color = SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black;
+        if (!GameManager.Instance.PlayerController.isShooting) CurrNum.color = SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black;
     }
 
     public async void Hit()
@@ -44,7 +45,9 @@ public class HUDController : BaseController
         for (var i = 0; i < Hearts.Length; i++)
         {
             if (!Hearts[i].gameObject.activeSelf) continue;
+            DOTween.To(() => Hearts[i].color, x => Hearts[i].color = x, GameManager.Instance.Red, 0.75f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             await Hearts[i].transform.DOShakeRotation(0.75f, new Vector3(0, 0, 15), 20, 2, true, ShakeRandomnessMode.Harmonic).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            DOTween.To(() => Hearts[i].color, x => Hearts[i].color = x, GameManager.Instance.White, 0.2f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             await Hearts[i].DOFade(0, 1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             Hearts[i].gameObject.SetActive(false);
             break;
@@ -57,7 +60,9 @@ public class HUDController : BaseController
         {
             if (Hearts[i].gameObject.activeSelf) continue;            
             Hearts[i].gameObject.SetActive(true);
+            DOTween.To(() => Hearts[i].color, x => Hearts[i].color = x, GameManager.Instance.Green, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             await Hearts[i].DOFade(1, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            DOTween.To(() => Hearts[i].color, x => Hearts[i].color = x, GameManager.Instance.White, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             break;
         }
     }

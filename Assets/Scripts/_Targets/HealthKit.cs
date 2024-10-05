@@ -9,4 +9,10 @@ public class HealthKit : PickUp
         await SR.DOFade(0, 0.2f).WithCancellation(ctx.Token).SuppressCancellationThrow();
         Destroy(gameObject);
     }
+
+    protected override void Alert()
+    {
+        if (GameManager.Instance.PlayerStats.Health > GameManager.Instance.PlayerStats.FullHealth / 2) return;
+        base.Alert();
+    }
 }

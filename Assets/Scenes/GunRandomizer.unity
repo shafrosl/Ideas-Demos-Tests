@@ -1107,13 +1107,14 @@ MonoBehaviour:
       BodyShots: 0
       TotalShots: 0
     Health: 0
+    FullHealth: 0
   Holes: []
   Black: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   White: {r: 0.98039216, g: 0.98039216, b: 0.98039216, a: 1}
-  Red: {r: 1, g: 0, b: 0, a: 1}
-  Green: {r: 0, g: 0.77254903, b: 0.4509804, a: 1}
-  Blue: {r: 0, g: 0.6880622, b: 1, a: 1}
-  Yellow: {r: 0.9607843, g: 0.84313726, b: 0.39215687, a: 1}
+  Red: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
+  Green: {r: 0.35684407, g: 0.764151, b: 0.5957974, a: 1}
+  Blue: {r: 0.3915094, g: 0.809101, b: 1, a: 1}
+  Yellow: {r: 1, g: 0.9014313, b: 0.5235849, a: 1}
   BulletHoles:
   - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
   - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
