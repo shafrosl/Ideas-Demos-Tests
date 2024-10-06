@@ -1,19 +1,30 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using Debug = Utility.Debug;
 
-public class PickUp : BaseTargetController
+public class TargetControllerPickUp : BaseTargetController
 {
+    public float yPosBase;
     public SpriteRenderer SR;
-    protected override void ControllerUpdate() => Alert();
-    private float yPosBase;
 
-    private void Start()
+    private void Start() => yPosBase = transform.parent.localPosition.y;
+
+    protected override async UniTask<UniTask> ControllerUpdate()
     {
-        yPosBase = transform.parent.localPosition.y;
-        internalCountdown = 10;
+        await base.ControllerUpdate();
+        Alert();
+        return UniTask.CompletedTask;
     }
-
+    
+    protected override UniTask Initialize()
+    {
+        if (isInitialized) return UniTask.CompletedTask;
+        internalCountdown = 10;
+        return base.Initialize();
+    }
+    
     protected virtual async void Alert()
     {
         if (internalCountdown <= 0)

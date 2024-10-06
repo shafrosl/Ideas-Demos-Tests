@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
@@ -8,13 +9,15 @@ public class BaseController : MonoBehaviour
     [ConditionalField(nameof(Canvas), true), SerializeField] public Canvas Canvas;
     [ConditionalField(nameof(CanvasGroup), true), SerializeField] public CanvasGroup CanvasGroup;
 
-    public virtual async UniTask Start()
+    private void Update() => ControllerUpdate();
+    
+    public virtual async UniTask LoadData()
     {
         while (!GameManager.Instance.IsReady) await UniTask.Delay(50);
         await Initialize();
     }
-
-    public virtual UniTask Initialize() => UniTask.CompletedTask;
+    
+    protected virtual UniTask Initialize() => UniTask.CompletedTask;
 
     public virtual async UniTask<UniTask> ToggleScreen(bool instant)
     {
@@ -49,4 +52,6 @@ public class BaseController : MonoBehaviour
 
         return UniTask.CompletedTask;
     }
+    
+    protected virtual void ControllerUpdate() { }
 }

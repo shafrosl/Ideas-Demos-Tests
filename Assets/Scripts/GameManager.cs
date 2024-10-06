@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
@@ -35,9 +36,12 @@ public class GameManager : MonoBehaviour
     [Header("Game States")]
     public bool GameStarted;
     private bool gamePaused;
-    
+
+    [Header("Controllers")]
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;
+    [ConditionalField(nameof(MainMenuController), true), SerializeField] public MainMenuController MainMenuController;
+    [ConditionalField(nameof(LoadingController), true), SerializeField] public LoadingController LoadingController;
     [ConditionalField(nameof(PlayerController), true), SerializeField] public Player PlayerController;
     [ConditionalField(nameof(HUDController), true), SerializeField] public HUDController HUDController;
     [ConditionalField(nameof(PoolController), true), SerializeField] public PoolController PoolController;
@@ -57,8 +61,8 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.P)) EditorApplication.isPaused = !EditorApplication.isPaused; 
         if (Input.GetKeyUp(KeyCode.Q)) EditorApplication.ExitPlaymode();
         if (Input.GetKeyUp(KeyCode.M)) ToggleCursorLock();
-        if (Input.GetKeyUp(KeyCode.Escape)) ToggleSettingsScreen();
 #endif
+        if (Input.GetKeyUp(KeyCode.Escape)) ToggleSettingsScreen();
     }
 
     public UniTask ToggleCursorLock(bool lockPointer)
@@ -115,21 +119,25 @@ public class GameManager : MonoBehaviour
 
     public async void StartGame()
     {
+        await LoadingController.ToggleScreen(false, true);
+        await GunSelectController.ToggleScreen(false, false);
         ToggleCamera(Cam.Game);
-        PlayerController.lockMovement = true;
         GameStarted = true;
-        await ToggleCursorLock(true);
+        PlayerController.lockMovement = true;
         PlayerStats = new PlayerStats(PlayerStats);
+        await ToggleCursorLock(true);
+        await HUDController.FadeCover(false);
         await GunSelectController.StartGame();
         await PlayerController.SetData();
-        await GunSelectController.ToggleScreen(false, false);
         PlayerController.ResetState();
+        await LoadingController.ToggleScreen(false, false);
     }
 
-    public void ToggleGamePaused(bool paused)
+    public async void ToggleGamePaused(bool paused)
     {
         if (!GameStarted) return;
         gamePaused = paused;
+        await HUDController.FadeCover(paused);
     }
 
     public void ToggleCamera(Cam cam)
@@ -154,14 +162,14 @@ public class GameManager : MonoBehaviour
     public void SetGameCamera()
     {
         ToggleCamera(Cam.Game);
-        GunSelectController.CanvasGroup.alpha = 0;
+        MainMenuController.CanvasGroup.alpha = 0;
     }
 
     [ButtonMethod()]
     public void SetDefaultCamera()
     {
         ToggleCamera(Cam.UI);
-        GunSelectController.CanvasGroup.alpha = 1;
+        MainMenuController.CanvasGroup.alpha = 1;
     }
     
     #endif

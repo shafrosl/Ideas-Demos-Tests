@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
 using UnityEngine;
+using Utility;
 using Debug = Utility.Debug;
 
 public class Player : MonoBehaviour, IMovement, IGun
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour, IMovement, IGun
         
         GameManager.Instance.HUDController.SetTotal(numOfBulletsTotal);
         GameManager.Instance.HUDController.SetCurrent(numOfBulletsTotal);
+        await ResetOverlay();
         await GameManager.Instance.HUDController.ResetHearts(hearts);
         return UniTask.CompletedTask;
     }
@@ -229,7 +231,18 @@ public class Player : MonoBehaviour, IMovement, IGun
         }
     }
 
-    public async UniTask<UniTask> OverlaySelector(bool show)
+    private UniTask ResetOverlay()
+    {
+        foreach (var overlay in DeathOverlay)
+        {
+            overlay.color = overlay.color.Modify(a: 0);
+            overlay.gameObject.SetActive(false);
+        }
+        
+        return UniTask.CompletedTask;
+    }
+
+    private async UniTask<UniTask> OverlaySelector(bool show)
     {
         var results = (DeathOverlay.Where(SR => show ? !SR.gameObject.activeSelf : SR.gameObject.activeSelf)).ToArray();
         var i = Random.Range(0, results.Length);

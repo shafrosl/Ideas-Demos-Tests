@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using MyBox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class HUDController : BaseController
 {
     public TextMeshProUGUI TotalNum, CurrNum, Slash;
     public Image Bullet;
+    public Image Cover;
     public Image[] Hearts;
     private bool SwitchColor;
 
@@ -69,15 +71,18 @@ public class HUDController : BaseController
 
     public UniTask ResetHearts(int num = 5)
     {
-        var numOfHearts = num;
-        foreach (var heart in Hearts)
+        for (var i = 0; i < num; i++)
         {
-            heart.gameObject.SetActive(true);
-            heart.color.Modify(a: 1);
-            numOfHearts--;
-            if (numOfHearts == 0) break;
+            Hearts[i].gameObject.SetActive(true);
+            Hearts[i].color = Hearts[i].color.Modify(a: 1);
         }
         
+        return UniTask.CompletedTask;
+    }
+
+    public async UniTask<UniTask> FadeCover(bool fadeIn)
+    {
+        await Cover.DOFade(fadeIn ? 1 : 0, 0.25f).SetUpdate(true);
         return UniTask.CompletedTask;
     }
 }

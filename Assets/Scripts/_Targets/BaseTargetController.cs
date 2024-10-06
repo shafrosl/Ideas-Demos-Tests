@@ -1,5 +1,8 @@
+using System;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Debug = Utility.Debug;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(HingeJoint))]
@@ -9,9 +12,22 @@ public abstract class BaseTargetController : MonoBehaviour
     protected float Distance => Vector3.Distance(transform.position, GameManager.Instance.PlayerController.transform.position);
     public float PositionDotValue => Vector3.Dot((GameManager.Instance.PlayerController.transform.position - transform.position), transform.forward);
 
+    protected bool isInitialized;
     protected float internalCountdown;
     protected CancellationTokenSource ctx = new();
+    
+    private async void Update() => await ControllerUpdate();
 
-    private void Update() => ControllerUpdate();
-    protected virtual void ControllerUpdate() { }
+    protected virtual async UniTask<UniTask> ControllerUpdate()
+    {
+        if (!GameManager.Instance.GameStarted) isInitialized = false;
+        else await Initialize();
+        return UniTask.CompletedTask;
+    }
+
+    protected virtual UniTask Initialize()
+    {
+        isInitialized = true;
+        return UniTask.CompletedTask;
+    }
 }

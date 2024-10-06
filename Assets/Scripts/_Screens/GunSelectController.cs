@@ -14,10 +14,12 @@ public class GunSelectController : BaseController
     public Button RandomizeAttachment;
     public Button RandomizeGems;
     public Button StartGameBtn;
-
-    public override async UniTask Start()
+    public Button BackToMenuBtn;
+    
+    public override async UniTask LoadData()
     {
-        await base.Start();
+        await GameManager.Instance.LoadingController.ToggleScreen(false, true);
+        await base.LoadData();
         if (GunSelectScreen) await GunSelectScreen.Initialize();
         if (GemScreen) await GemScreen.Initialize();
         if (GunDataScreen)
@@ -26,9 +28,11 @@ public class GunSelectController : BaseController
             await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
             await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
         }
+        await ToggleScreen(true, true);
+        await GameManager.Instance.LoadingController.ToggleScreen(false, false);
     }
 
-    public override UniTask Initialize()
+    protected override UniTask Initialize()
     {
         if (GunSelectScreen)
         {
@@ -50,6 +54,12 @@ public class GunSelectController : BaseController
         {
             StartGameBtn.onClick.RemoveAllListeners();
             StartGameBtn.onClick.AddListener(GameManager.Instance.StartGame);
+        }
+
+        if (BackToMenuBtn)
+        {
+            BackToMenuBtn.onClick.RemoveAllListeners();
+            BackToMenuBtn.onClick.AddListener(BackToMenu);
         }
         
         currentItem = 0;
@@ -103,17 +113,6 @@ public class GunSelectController : BaseController
         }
     }
 
-    private async void RandomizeRarity()
-    {
-        if (GunSelectScreen) GunSelectScreen.RandomizeRarity(currentItem);
-        if (GunDataScreen)
-        {
-            await GunDataScreen.InitializeData(GameManager.Instance.PlayerStats.CurrBodyObj);
-            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrStockObj);
-            await GunDataScreen.AddData(GameManager.Instance.PlayerStats.CurrBarrelObj);
-        }
-    }
-
     public async UniTask StartGame()
     {
         await GameManager.Instance.PlayerStats.SetStats(GameManager.Instance.GunSelectController.GunDataScreen.DataList);
@@ -121,5 +120,15 @@ public class GunSelectController : BaseController
         await GunSelectScreen.DestroyGems();
         await GemScreen.StoreGems();
         await GemScreen.DestroyGems();
+    }
+
+    public async void BackToMenu()
+    {
+        await GameManager.Instance.LoadingController.ToggleScreen(false, true);
+        ToggleScreen(true, false);
+        await GunSelectScreen.DestroyGems();
+        await GemScreen.DestroyGems();
+        GameManager.Instance.LoadingController.ToggleScreen(true, false);
+        await GameManager.Instance.MainMenuController.ToggleScreen(false, true);
     }
 }

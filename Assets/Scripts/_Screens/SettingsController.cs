@@ -15,6 +15,9 @@ public class SettingsController : BaseController
     private async void ReturnToMenu()
     {
         if (!GameManager.Instance.GunSelectController) return;
+        await GameManager.Instance.LoadingController.ToggleScreen(false, true);
+        await ToggleScreen(false,false);
+        
         if (GameManager.Instance.GameStarted)
         {
             if (GameManager.Instance.Holes.IsSafe())
@@ -31,14 +34,16 @@ public class SettingsController : BaseController
             GameManager.Instance.GemsInGame.Clear();
             GameManager.Instance.GameStarted = false;
         }
+        
+        await GameManager.Instance.ToggleCursorLock(false);
         await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
-        await ToggleScreen(false,false);
-        GameManager.Instance.ToggleCursorLock(false);
+        await GameManager.Instance.LoadingController.ToggleScreen(false, false);
     }
 
     public override async UniTask<UniTask> ToggleScreen(bool instant)
     {
         var ct = this.GetCancellationTokenOnDestroy();
+        await Initialize();
         ToggleResumeBtn(GameManager.Instance.GameStarted);
         if (CanvasGroup.alpha == 0)
         {
@@ -67,6 +72,7 @@ public class SettingsController : BaseController
     public override async UniTask<UniTask> ToggleScreen(bool instant, bool show)
     {
         var ct = this.GetCancellationTokenOnDestroy();
+        await Initialize();
         ToggleResumeBtn(GameManager.Instance.GameStarted);
         if (show)
         {
@@ -92,7 +98,7 @@ public class SettingsController : BaseController
         return UniTask.CompletedTask;
     }
     
-    public override UniTask Initialize()
+    protected override UniTask Initialize()
     {
         MenuBtn.onClick.RemoveAllListeners();
         MenuBtn.onClick.AddListener(ReturnToMenu);

@@ -10,9 +10,6 @@ public class TargetController : BaseTargetController
     public Transform BulletExit;
     public ParticleSystem MuzzleFlash;
 
-    [Header("States")] 
-    public bool isMoving;
-
     [Header("Settings")] 
     public bool IsPingPong;
     [ConditionalField(nameof(IsPingPong)), ConstantsSelection(typeof(Axis))] public Axis PingPongAxis;
@@ -23,6 +20,7 @@ public class TargetController : BaseTargetController
     [Range(0.0f, 1.0f)] public float Chance;
     public float DistanceToShoot;
     public float ShootCountdownTimer;
+    private bool firstShotTaken;
     
     [Header("Pop Ups")]
     public TextPopUp HeadShot;
@@ -30,17 +28,26 @@ public class TargetController : BaseTargetController
     
     private bool inShootingRange => Distance < DistanceToShoot;
     
-
-    private void Start() => PingPongAtStart();
-
-    protected override void ControllerUpdate()
+    protected override UniTask Initialize()
     {
+        if (isInitialized) return UniTask.CompletedTask;
+        firstShotTaken = false;
+        internalCountdown = ShootCountdownTimer + 10;
+        PingPongAtStart();
+        return base.Initialize();
+    }
+    
+    protected override async UniTask<UniTask> ControllerUpdate()
+    {
+        await base.ControllerUpdate();
         if (internalCountdown > 0) internalCountdown -= Time.deltaTime;
         else
         {
             Shoot();
             internalCountdown = ShootCountdownTimer;
         }
+        
+        return UniTask.CompletedTask;
     }
 
     private void Shoot()
@@ -56,6 +63,11 @@ public class TargetController : BaseTargetController
         }
         else
         {
+            if (!firstShotTaken)
+            {
+                firstShotTaken = true;
+                return;
+            }
             GameManager.Instance.PlayerController.isHit = true;
         }
     }
@@ -74,6 +86,7 @@ public class TargetController : BaseTargetController
 
     private async void MovePingPongX(Vector2 xDirs, float? speedA = null, float? speedB = null, int? delayMs = null)
     {
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(xDirs.x, speedA ?? 2);
         await UniTask.Delay(delayMs ?? 0);
         await MoveLinearX(xDirs.y, speedB ?? 2);
@@ -82,6 +95,7 @@ public class TargetController : BaseTargetController
     
     private async void MovePingPongZ(Vector2 xDirs, float? speedA = null, float? speedB = null, int? delayMs = null)
     {
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(xDirs.x, speedA ?? 2);
         await UniTask.Delay(delayMs ?? 0);
         await MoveLinearZ(xDirs.y, speedB ?? 2);
@@ -90,6 +104,7 @@ public class TargetController : BaseTargetController
     
     private async void MovePingPongXZ(Vector2 xDirs, float? speedA = null, float? speedB = null, int? delayMs = null)
     {
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(xDirs.x, speedA ?? 2);
         await UniTask.Delay(delayMs ?? 0);
         await MoveLinearZ(xDirs.y, speedB ?? 2);
@@ -102,6 +117,7 @@ public class TargetController : BaseTargetController
     
     private async void MovePingPongZX(Vector2 xDirs, float? speedA = null, float? speedB = null, int? delayMs = null)
     {
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(xDirs.x, speedA ?? 2);
         await UniTask.Delay(delayMs ?? 0);
         await MoveLinearX(xDirs.y, speedB ?? 2);
@@ -114,6 +130,7 @@ public class TargetController : BaseTargetController
 
     private void PingPongAtStart()
     {
+        if (!GameManager.Instance.GameStarted) return;
         if (!IsPingPong) return;
         switch (PingPongAxis)
         {

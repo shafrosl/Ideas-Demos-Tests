@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 
-public class HealthKit : PickUp
+public class TargetControllerHealthKit : TargetControllerPickUp
 {
     public override async void OnHit()
     {
