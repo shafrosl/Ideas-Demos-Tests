@@ -55,3 +55,10 @@ public enum Axis
     XZ = 2,
     ZX = 3
 }
+
+public enum GameMode
+{
+    NotSelected,
+    GunRange,
+    TimeCrisis
+}

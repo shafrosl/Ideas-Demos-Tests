@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
@@ -32,16 +31,18 @@ public class GameManager : MonoBehaviour
     [Header("Shared Assets")] 
     public Sprite[] BulletHoles;
     public GameObject Sparks;
-    
-    [Header("Game States")]
+
+    [Header("Game States")] 
+    public GameMode GameMode = GameMode.NotSelected;
     public bool GameStarted;
-    private bool gamePaused;
+    public bool InGame;
 
     [Header("Controllers")]
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;
     [ConditionalField(nameof(MainMenuController), true), SerializeField] public MainMenuController MainMenuController;
     [ConditionalField(nameof(LoadingController), true), SerializeField] public LoadingController LoadingController;
+    [ConditionalField(nameof(GameOverController), true), SerializeField] public GameOverController GameOverController;
     [ConditionalField(nameof(PlayerController), true), SerializeField] public Player PlayerController;
     [ConditionalField(nameof(HUDController), true), SerializeField] public HUDController HUDController;
     [ConditionalField(nameof(PoolController), true), SerializeField] public PoolController PoolController;
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.M)) ToggleCursorLock();
 #endif
         if (Input.GetKeyUp(KeyCode.Escape)) ToggleSettingsScreen();
+        GameOverCheck();
     }
 
     public UniTask ToggleCursorLock(bool lockPointer)
@@ -122,7 +124,7 @@ public class GameManager : MonoBehaviour
         await LoadingController.ToggleScreen(false, true);
         await GunSelectController.ToggleScreen(false, false);
         ToggleCamera(Cam.Game);
-        GameStarted = true;
+        InGame = GameStarted = true;
         PlayerController.lockMovement = true;
         PlayerStats = new PlayerStats(PlayerStats);
         await ToggleCursorLock(true);
@@ -133,10 +135,20 @@ public class GameManager : MonoBehaviour
         await LoadingController.ToggleScreen(false, false);
     }
 
+    public async void GameOverCheck()
+    {
+        if (!InGame) return;
+        if (!GameStarted) return;
+        if (PlayerStats.Health > 0) return;
+        InGame = GameStarted = false;
+        await GameOverController.ToggleScreen(false, true);
+        await ToggleCursorLock(false);
+    }
+
     public async void ToggleGamePaused(bool paused)
     {
         if (!GameStarted) return;
-        gamePaused = paused;
+        InGame = !paused;
         await HUDController.FadeCover(paused);
     }
 

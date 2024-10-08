@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cinemachine;
@@ -62,7 +61,7 @@ public class Player : MonoBehaviour, IMovement, IGun
                     fireRateCooldownTimer = 1 / (float)stat.Value;
                     break;
                 case Modifier.RecoilControl: 
-                    recoilControl = 1 / (float)stat.Value;
+                    recoilControl = (1 / (float)stat.Value) * 2;
                     break;
                 case Modifier.MagazineSize:
                     numOfBulletsCurrent = numOfBulletsTotal = 5 * stat.Value;

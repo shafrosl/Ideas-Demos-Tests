@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -60,6 +61,47 @@ public class Score
     [SerializeField] public int HeadShots;
     [SerializeField] public int BodyShots;
     [SerializeField] public int TotalShots;
+    [SerializeField] public int Kills;
+    [SerializeField] public int Mistakes;
     public int GetMisses() => TotalShots - (HeadShots + BodyShots);
-    public double GetAccuracy() => (double)(HeadShots + BodyShots) / TotalShots;
+    public int GetAccuracy() => (int)(((double)(HeadShots + BodyShots) / TotalShots) * 100);
+
+    public int GetScore()
+    {
+        switch (GameManager.Instance.GameMode)
+        {
+            case GameMode.GunRange:
+                return (HeadShots * 2) + BodyShots - (Mistakes * 2);
+            case GameMode.TimeCrisis:
+                return (HeadShots * 2) + BodyShots + (Kills * 10);
+            default:
+                return 0;
+        }
+    }
+
+    public void GetVerdict(TextMeshProUGUI Text)
+    {
+        switch (GameManager.Instance.GameMode)
+        {
+            case GameMode.GunRange:
+                if (GetScore() >= 64)
+                {
+                    Text.text = "You achieved marksman";
+                    Text.color = GameManager.Instance.Black;
+                }
+                else if (GetScore() >= 48 && GetScore() < 64)
+                {
+                    Text.text = "You passed";
+                    Text.color = GameManager.Instance.Black;
+                }
+                else if (GetScore() < 48)
+                {
+                    Text.text = "You failed";
+                    Text.color = GameManager.Instance.Red;
+                }
+                break;
+            case GameMode.TimeCrisis:
+                break;
+        }
+    }
 }

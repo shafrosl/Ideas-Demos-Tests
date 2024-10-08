@@ -27,6 +27,7 @@ public abstract class BaseTargetController : MonoBehaviour
 
     protected virtual UniTask Initialize()
     {
+        if (!GameManager.Instance.GameStarted) return UniTask.CompletedTask;
         isInitialized = true;
         return UniTask.CompletedTask;
     }

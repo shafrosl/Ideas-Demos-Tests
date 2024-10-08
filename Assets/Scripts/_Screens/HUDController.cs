@@ -1,7 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using MyBox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

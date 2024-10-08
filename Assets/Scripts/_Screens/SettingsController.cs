@@ -12,7 +12,7 @@ public class SettingsController : BaseController
     private void ToggleResumeBtn(bool show) => ResumeBtn.gameObject.SetActive(show);
     private async void ResumeGame() => await ToggleScreen(false);
 
-    private async void ReturnToMenu()
+    private async void ReturnToGunSelect()
     {
         if (!GameManager.Instance.GunSelectController) return;
         await GameManager.Instance.LoadingController.ToggleScreen(false, true);
@@ -32,7 +32,7 @@ public class SettingsController : BaseController
             }
             
             GameManager.Instance.GemsInGame.Clear();
-            GameManager.Instance.GameStarted = false;
+            GameManager.Instance.InGame = GameManager.Instance.GameStarted = false;
         }
         
         await GameManager.Instance.ToggleCursorLock(false);
@@ -101,7 +101,7 @@ public class SettingsController : BaseController
     protected override UniTask Initialize()
     {
         MenuBtn.onClick.RemoveAllListeners();
-        MenuBtn.onClick.AddListener(ReturnToMenu);
+        MenuBtn.onClick.AddListener(ReturnToGunSelect);
         ResumeBtn.onClick.RemoveAllListeners();
         ResumeBtn.onClick.AddListener(ResumeGame);
         return base.Initialize();

@@ -21,6 +21,7 @@ public class TargetController : BaseTargetController
     public float DistanceToShoot;
     public float ShootCountdownTimer;
     private bool firstShotTaken;
+    private UniTask MoveTask;
     
     [Header("Pop Ups")]
     public TextPopUp HeadShot;
@@ -40,6 +41,7 @@ public class TargetController : BaseTargetController
     protected override async UniTask<UniTask> ControllerUpdate()
     {
         await base.ControllerUpdate();
+        if (!GameManager.Instance.GameStarted) return UniTask.CompletedTask;
         if (internalCountdown > 0) internalCountdown -= Time.deltaTime;
         else
         {
@@ -52,6 +54,7 @@ public class TargetController : BaseTargetController
 
     private void Shoot()
     {
+        if (!GameManager.Instance.GameStarted) return;
         if (!inShootingRange) return;
         MuzzleFlash.transform.localEulerAngles = PositionDotValue < 0 ? new Vector3(0, 180, 0) : new Vector3(0, 0, 0);
         MuzzleFlash.Play();
@@ -88,8 +91,11 @@ public class TargetController : BaseTargetController
     {
         if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(xDirs.x, speedA ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(xDirs.y, speedB ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         MovePingPongX(xDirs, speedA, speedB);
     }
     
@@ -97,8 +103,11 @@ public class TargetController : BaseTargetController
     {
         if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(xDirs.x, speedA ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(xDirs.y, speedB ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         MovePingPongZ(xDirs, speedA, speedB);
     }
     
@@ -106,12 +115,19 @@ public class TargetController : BaseTargetController
     {
         if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(xDirs.x, speedA ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(xDirs.y, speedB ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(-xDirs.y, speedB ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(-xDirs.x, speedA ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         MovePingPongXZ(xDirs, speedA, speedB);
     }
     
@@ -119,12 +135,19 @@ public class TargetController : BaseTargetController
     {
         if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(xDirs.x, speedA ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(xDirs.y, speedB ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearX(-xDirs.y, speedB ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         await UniTask.Delay(delayMs ?? 0);
+        if (!GameManager.Instance.GameStarted) return;
         await MoveLinearZ(-xDirs.x, speedA ?? 2);
+        if (!GameManager.Instance.GameStarted) return;
         MovePingPongXZ(xDirs, speedA, speedB);
     }
 
