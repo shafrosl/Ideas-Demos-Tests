@@ -1,9 +1,10 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
 using Utility;
 
-public class GameOverController : LoadingController
+public class GameOverController : BaseController
 {
     public TextMeshProUGUI Title, Score, Verdict;
     public Button ReturnToGunSelectBtn;
@@ -17,16 +18,56 @@ public class GameOverController : LoadingController
         return base.Initialize();
     }
 
-    public override UniTask<UniTask> ToggleScreen(bool instant, bool show)
+    public override async UniTask<UniTask> ToggleScreen(bool instant)
     {
-        if (show) ShowScore();
-        return base.ToggleScreen(instant, show);
-    }
+        var ct = this.GetCancellationTokenOnDestroy();
+        if (CanvasGroup.alpha == 0)
+        {
+            ShowScore();
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = true;
+            GameManager.Instance.HUDController.FadeCover(true);
+            await CanvasGroup.DOFade(1, .5f).SetUpdate(true).WithCancellation(ct).SuppressCancellationThrow();
+            CanvasGroup.interactable = CanvasGroup.blocksRaycasts = true;
+            GameManager.Instance.ToggleCamera(Cam.UI);
+            GameManager.Instance.HUDController.FadeCover(false);
+        }
+        else
+        {
+            GameManager.Instance.HUDController.FadeCover(true);
+            GameManager.Instance.ToggleCamera(GameManager.Instance.GameStarted ? Cam.Game : Cam.UI);
+            await CanvasGroup.DOFade(0, 0.5f).SetUpdate(true).WithCancellation(ct).SuppressCancellationThrow();
+            CanvasGroup.interactable = CanvasGroup.blocksRaycasts = false;
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = false;
+            GameManager.Instance.HUDController.FadeCover(false);
+        }
 
-    public override UniTask<UniTask> ToggleScreen(bool instant)
+        return UniTask.CompletedTask;
+    }
+    
+    public override async UniTask<UniTask> ToggleScreen(bool instant, bool show)
     {
-        if (CanvasGroup.alpha == 0) ShowScore();
-        return base.ToggleScreen(instant);
+        var ct = this.GetCancellationTokenOnDestroy();
+        if (show)
+        {
+            ShowScore();
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = true;
+            GameManager.Instance.HUDController.FadeCover(true);
+            await CanvasGroup.DOFade(1, .5f).SetUpdate(true).WithCancellation(ct).SuppressCancellationThrow();
+            CanvasGroup.interactable = CanvasGroup.blocksRaycasts = true;
+            GameManager.Instance.ToggleCamera(Cam.UI);
+            GameManager.Instance.HUDController.FadeCover(false);
+        }
+        else
+        {
+            GameManager.Instance.ToggleCamera(GameManager.Instance.GameStarted ? Cam.Game : Cam.UI);
+            GameManager.Instance.HUDController.FadeCover(true);
+            await CanvasGroup.DOFade(0, 0.5f).SetUpdate(true).WithCancellation(ct).SuppressCancellationThrow();
+            CanvasGroup.interactable = CanvasGroup.blocksRaycasts = false;
+            if (GameManager.Instance.GameStarted) GameManager.Instance.PlayerController.lockMovement = false;
+            GameManager.Instance.HUDController.FadeCover(false);
+        }
+
+        return UniTask.CompletedTask;
     }
 
     private async void ReturnToGunSelect()
@@ -35,22 +76,19 @@ public class GameOverController : LoadingController
         await GameManager.Instance.LoadingController.ToggleScreen(false, true);
         await ToggleScreen(false,false);
         
-        if (GameManager.Instance.GameStarted)
+        if (GameManager.Instance.Holes.IsSafe())
         {
-            if (GameManager.Instance.Holes.IsSafe())
-            {
-                foreach (var hole in GameManager.Instance.Holes) Destroy(hole);
-            }
-
-            if (GameManager.Instance.GemsInGame.IsSafe())
-            {
-                var restored = await GameManager.Instance.GunSelectController.GemScreen.RestoreGems();
-                if (!restored) return;
-            }
-            
-            GameManager.Instance.GemsInGame.Clear();
-            GameManager.Instance.InGame = GameManager.Instance.GameStarted = false;
+            foreach (var hole in GameManager.Instance.Holes) Destroy(hole);
         }
+
+        if (GameManager.Instance.GemsInGame.IsSafe())
+        {
+            var restored = await GameManager.Instance.GunSelectController.GemScreen.RestoreGems();
+            if (!restored) return;
+        }
+            
+        GameManager.Instance.GemsInGame.Clear();
+        GameManager.Instance.InGame = GameManager.Instance.GameStarted = false;
         
         await GameManager.Instance.ToggleCursorLock(false);
         await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
