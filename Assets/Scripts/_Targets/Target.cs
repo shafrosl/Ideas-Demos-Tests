@@ -68,7 +68,7 @@ public class Target : MonoBehaviour, IBulletHole, IScore
             spark.transform.localEulerAngles = TargetController.PositionDotValue < 0 ? new Vector3(0, 0, 0) : new Vector3(0, 180, 0);
             ps.sortingOrder = holeRenderer.sortingOrder + 1;
         }
-        TargetController.Rigidbody.AddForce(0, 0, 100 * GameManager.Instance.PlayerController.Damage);
+        TargetController.Rigidbody.AddForce(-normal.x * 100 * GameManager.Instance.PlayerController.Damage, -normal.y * 100 * GameManager.Instance.PlayerController.Damage, -normal.z * 100 * GameManager.Instance.PlayerController.Damage);
         OnHit();
         return UniTask.CompletedTask;
     }
