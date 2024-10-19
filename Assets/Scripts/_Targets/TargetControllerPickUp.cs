@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using Debug = Utility.Debug;
 
+[RequireComponent(typeof(HingeJoint))]
 public class TargetControllerPickUp : BaseTargetController
 {
     public float yPosBase;

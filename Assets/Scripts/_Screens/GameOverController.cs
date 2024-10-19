@@ -86,12 +86,15 @@ public class GameOverController : BaseController
             var restored = await GameManager.Instance.GunSelectController.GemScreen.RestoreGems();
             if (!restored) return;
         }
-            
-        GameManager.Instance.GemsInGame.Clear();
-        GameManager.Instance.InGame = GameManager.Instance.GameStarted = false;
-        
+
         await GameManager.Instance.ToggleCursorLock(false);
-        await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
+        if (!GameManager.Instance.GunSelectController.IsShowing)
+        {
+            GameManager.Instance.GemsInGame.Clear();
+            GameManager.Instance.InGame = GameManager.Instance.GameStarted = false;
+            await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
+        }
+        
         await GameManager.Instance.LoadingController.ToggleScreen(false, false);
     }
 
@@ -101,9 +104,9 @@ public class GameOverController : BaseController
         {
             case GameMode.GunRange:
                 var score = GameManager.Instance.PlayerStats.Score;
-                Title.text = "Head Shots\nBody Shots\nMissed Shots\nTotal Shots\nMistakes\nScore";
+                Title.text = "Head Shots\nBody Shots\nMissed Shots\nTotal Shots\nAccuracy\nScore";
                 Score.text = score.HeadShots + "\n" + score.BodyShots + "\n" + score.GetMisses() + "\n" +
-                             score.TotalShots + "\n" + score.Mistakes + "\n" + score.GetScore();
+                             score.TotalShots + "\n" + score.GetAccuracy() + "%\n" + score.GetScore();
                 score.GetVerdict(Verdict);
                 break;
             case GameMode.TimeCrisis:

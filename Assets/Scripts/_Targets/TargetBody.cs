@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class TargetBody : Target
 {
     protected override void TargetUpdate()

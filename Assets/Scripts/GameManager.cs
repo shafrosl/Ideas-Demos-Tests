@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEditor;
 using UnityEngine;
+using Utility;
 using Debug = Utility.Debug;
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     public PlayerStats PlayerStats;
     public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
     public List<GameObject> Holes = new();
+    public List<TargetController> Targets = new();
     
     [Header("Game Colors")] 
     public Color Black;
@@ -37,12 +39,12 @@ public class GameManager : MonoBehaviour
     public bool GameStarted;
     public bool InGame;
 
-    [Header("Controllers")]
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;
     [ConditionalField(nameof(MainMenuController), true), SerializeField] public MainMenuController MainMenuController;
     [ConditionalField(nameof(LoadingController), true), SerializeField] public LoadingController LoadingController;
     [ConditionalField(nameof(GameOverController), true), SerializeField] public GameOverController GameOverController;
+    [ConditionalField(nameof(MapController), true), SerializeField] public MapController MapController;
     [ConditionalField(nameof(PlayerController), true), SerializeField] public Player PlayerController;
     [ConditionalField(nameof(HUDController), true), SerializeField] public HUDController HUDController;
     [ConditionalField(nameof(PoolController), true), SerializeField] public PoolController PoolController;
@@ -127,6 +129,7 @@ public class GameManager : MonoBehaviour
         InGame = GameStarted = true;
         PlayerController.lockMovement = true;
         PlayerStats = new PlayerStats(PlayerStats);
+        MapController.SetMap();
         await ToggleCursorLock(true);
         await HUDController.FadeCover(false);
         await GunSelectController.StartGame();
@@ -174,6 +177,7 @@ public class GameManager : MonoBehaviour
     public void SetGameCamera()
     {
         ToggleCamera(Cam.Game);
+        HUDController.Cover.gameObject.SetActive(false);
         MainMenuController.CanvasGroup.alpha = 0;
     }
 
@@ -182,6 +186,7 @@ public class GameManager : MonoBehaviour
     {
         ToggleCamera(Cam.UI);
         MainMenuController.CanvasGroup.alpha = 1;
+        HUDController.Cover.gameObject.SetActive(true);
     }
     
     #endif

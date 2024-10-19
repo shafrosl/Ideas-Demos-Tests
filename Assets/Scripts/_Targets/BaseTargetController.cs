@@ -1,11 +1,9 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = Utility.Debug;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(HingeJoint))]
 public abstract class BaseTargetController : MonoBehaviour
 {
     public Rigidbody Rigidbody;

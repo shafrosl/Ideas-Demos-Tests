@@ -172,7 +172,15 @@ public class Player : MonoBehaviour, IMovement, IGun
                     if (result.collider is null) continue;
                     if (!result.collider.CompareTag("Target")) continue;
                     if (!result.collider.transform.parent.TryGetComponent(out Target target)) continue;
-                    target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), result.collider.transform.parent.GetComponent<SpriteRenderer>(), target.transform.localPosition);
+                    if (result.collider.transform.parent.TryGetComponent<SpriteRenderer>(out var SR))
+                    {
+                        target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), SR,target.transform.localPosition);
+                    }
+                    else
+                    {
+                        target.InstantiateHole(result.transform.InverseTransformPoint(result.point), result.normal);
+                    }
+                    
                     break;
                 }
                 

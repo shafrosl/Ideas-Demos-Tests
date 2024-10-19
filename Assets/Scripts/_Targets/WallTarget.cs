@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Debug = Utility.Debug;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class WallTarget : Target
 {
     public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)

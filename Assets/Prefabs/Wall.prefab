@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2871806461096024749}
-  - component: {fileID: 536087261049913752}
   - component: {fileID: 8786760991737572528}
+  - component: {fileID: 7614237970976254746}
+  - component: {fileID: 5291802400150154152}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -34,22 +35,6 @@ Transform:
   - {fileID: 5905198397047025477}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &536087261049913752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710023307620621299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0be80663b04e440808a7f90f7658af00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Rigidbody: {fileID: 8786760991737572528}
-  Holes:
-  - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
-  - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
 --- !u!54 &8786760991737572528
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -77,6 +62,58 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
+--- !u!59 &7614237970976254746
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1710023307620621299}
+  m_ConnectedBody: {fileID: 0}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_Axis: {x: 1, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 0
+  m_UseLimits: 0
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: 0
+    max: 0
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
+--- !u!114 &5291802400150154152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1710023307620621299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3499ee636d3ae4adf9de702d17b87ba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rigidbody: {fileID: 0}
 --- !u!1 &5722158446837265600
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +240,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -577876327
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: -5
   m_Sprite: {fileID: 21300000, guid: c5ba2bd85eb394f3ab481e6be8e5f137, type: 3}
   m_Color: {r: 0.8039216, g: 0.8039216, b: 0.8039216, a: 1}
@@ -228,4 +265,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7cfdb41540649e68480427699ce88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetController: {fileID: 536087261049913752}
+  TargetController: {fileID: 0}

@@ -42,7 +42,6 @@ public class PlayerStats
     {
         if (Health < 1) return false;
         Health -= 1;
-        if (Health < 4) GameManager.Instance.HUDController.SwitchTextColor(true);
         return Health != 0;
     }
 
@@ -50,7 +49,6 @@ public class PlayerStats
     {
         if (Health > 4) return false;
         Health += 1;
-        if (Health > 3) GameManager.Instance.HUDController.SwitchTextColor(false);
         return Health <= 5;
     }
 }
@@ -84,19 +82,19 @@ public class Score
         switch (GameManager.Instance.GameMode)
         {
             case GameMode.GunRange:
-                if (GetScore() >= 64)
+                if (GetAccuracy() >= 85)
                 {
-                    Text.text = "You achieved marksman";
+                    Text.text = "You're alright";
                     Text.color = GameManager.Instance.Black;
                 }
-                else if (GetScore() >= 48 && GetScore() < 64)
+                else if (GetAccuracy() >= 45 && GetAccuracy() < 85)
                 {
-                    Text.text = "You passed";
+                    Text.text = "You're... ehhh.";
                     Text.color = GameManager.Instance.Black;
                 }
-                else if (GetScore() < 48)
+                else if (GetAccuracy() < 45)
                 {
-                    Text.text = "You failed";
+                    Text.text = "You're pretty shit";
                     Text.color = GameManager.Instance.Red;
                 }
                 break;

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
+using Debug = Utility.Debug;
 
 public class HUDController : BaseController
 {
@@ -12,7 +13,6 @@ public class HUDController : BaseController
     public Image Bullet;
     public Image Cover;
     public Image[] Hearts;
-    private bool SwitchColor;
 
     private CancellationTokenSource ctx = new();
     
@@ -22,8 +22,11 @@ public class HUDController : BaseController
     public async void AnimateShot()
     {
         DOTween.To(() => CurrNum.color, x => CurrNum.color = x, GameManager.Instance.Yellow, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        CurrNum.fontSharedMaterial.SetColor("_OutlineColor", GameManager.Instance.Yellow);
         await DOTween.To(() => Bullet.transform.localScale, x => Bullet.transform.localScale = x, new Vector3(4.0f, 4.0f, 4.0f), 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-        DOTween.To(() => CurrNum.color, x => CurrNum.color = x, SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        
+        DOTween.To(() => CurrNum.color, x => CurrNum.color = x, GameManager.Instance.White, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        CurrNum.fontSharedMaterial.SetColor("_OutlineColor", Color.black);
         await DOTween.To(() => Bullet.transform.localScale, x => Bullet.transform.localScale = x, new Vector3(3.0f, 3.0f, 3.0f), 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
     }
 
@@ -31,14 +34,9 @@ public class HUDController : BaseController
     {
         Bullet.transform.DOShakeRotation(0.1f, new Vector3(0, 0, 15), 3, 10, true, ShakeRandomnessMode.Harmonic).WithCancellation(ctx.Token).SuppressCancellationThrow();
         await DOTween.To(() => CurrNum.color, x => CurrNum.color = x, GameManager.Instance.Red, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-        await DOTween.To(() => CurrNum.color, x => CurrNum.color = x, SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-    }
-
-    public void SwitchTextColor(bool switchColor)
-    {
-        SwitchColor = switchColor;
-        TotalNum.color = Slash.color = SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black;
-        if (!GameManager.Instance.PlayerController.isShooting) CurrNum.color = SwitchColor ? GameManager.Instance.White : GameManager.Instance.Black;
+        CurrNum.fontSharedMaterial.SetColor("_OutlineColor", GameManager.Instance.Red);
+        await DOTween.To(() => CurrNum.color, x => CurrNum.color = x, GameManager.Instance.White, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        CurrNum.fontSharedMaterial.SetColor("_OutlineColor", Color.black);
     }
 
     public async void Hit()
@@ -81,7 +79,7 @@ public class HUDController : BaseController
 
     public async UniTask<UniTask> FadeCover(bool fadeIn)
     {
-        await Cover.DOFade(fadeIn ? 1 : 0, 0.25f).SetUpdate(true);
+        await Cover.DOFade(fadeIn ? 1 : 0, 0.1f).SetUpdate(true);
         return UniTask.CompletedTask;
     }
 }

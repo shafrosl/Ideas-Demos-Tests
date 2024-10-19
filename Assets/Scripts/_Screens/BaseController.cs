@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
@@ -8,6 +9,8 @@ public class BaseController : MonoBehaviour
     [ConditionalField(nameof(Canvas), true), SerializeField] public Canvas Canvas;
     [ConditionalField(nameof(CanvasGroup), true), SerializeField] public CanvasGroup CanvasGroup;
 
+    public bool IsShowing => CanvasGroup.alpha > 0;
+    
     private void Update() => ControllerUpdate();
     
     public virtual async UniTask LoadData()

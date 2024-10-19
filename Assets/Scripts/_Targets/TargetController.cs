@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
@@ -5,6 +6,7 @@ using UnityEngine;
 using Debug = Utility.Debug;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(HingeJoint))]
 public class TargetController : BaseTargetController
 {
     public Transform BulletExit;
@@ -16,16 +18,14 @@ public class TargetController : BaseTargetController
     [ConditionalField(nameof(IsPingPong))] public Vector2 PingPongValues;
     [ConditionalField(nameof(IsPingPong))] public Vector2 PingPongSpeed;
     [ConditionalField(nameof(IsPingPong))] public int PingPongDelayBetween;
-    
+
     [Range(0.0f, 1.0f)] public float Chance;
     public float DistanceToShoot;
     public float ShootCountdownTimer;
     private bool firstShotTaken;
-    private UniTask MoveTask;
     
-    [Header("Pop Ups")]
-    public TextPopUp HeadShot;
-    public TextPopUp BodyShot;
+    [HideInInspector] public TextPopUp HeadShot;
+    [HideInInspector] public TextPopUp BodyShot;
     
     private bool inShootingRange => Distance < DistanceToShoot;
     
@@ -35,6 +35,7 @@ public class TargetController : BaseTargetController
         firstShotTaken = false;
         internalCountdown = ShootCountdownTimer + 10;
         PingPongAtStart();
+        GameManager.Instance.Targets.Add(this);
         return base.Initialize();
     }
     
@@ -55,6 +56,7 @@ public class TargetController : BaseTargetController
     private void Shoot()
     {
         if (!GameManager.Instance.GameStarted) return;
+        if (GameManager.Instance.GameMode == GameMode.GunRange) return;
         if (!inShootingRange) return;
         MuzzleFlash.transform.localEulerAngles = PositionDotValue < 0 ? new Vector3(0, 180, 0) : new Vector3(0, 0, 0);
         MuzzleFlash.Play();
@@ -77,13 +79,13 @@ public class TargetController : BaseTargetController
 
     private async UniTask<UniTask> MoveLinearX(float xDir, float speed = 2)
     {
-        await transform.parent.DOMoveX(xDir, speed).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        await transform.parent.DOLocalMoveX(xDir, speed).WithCancellation(ctx.Token).SuppressCancellationThrow();
         return UniTask.CompletedTask;
     }
     
     private async UniTask<UniTask> MoveLinearZ(float xDir, float speed = 2)
     {
-        await transform.parent.DOMoveZ(xDir, speed).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        await transform.parent.DOLocalMoveZ(xDir, speed).WithCancellation(ctx.Token).SuppressCancellationThrow();
         return UniTask.CompletedTask;
     }
 

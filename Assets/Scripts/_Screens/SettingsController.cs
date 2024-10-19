@@ -37,6 +37,7 @@ public class SettingsController : BaseController
         
         await GameManager.Instance.ToggleCursorLock(false);
         await GameManager.Instance.GunSelectController.ToggleScreen(true, true);
+        if (GameManager.Instance.GameMode == GameMode.GunRange) await GameManager.Instance.GameOverController.ToggleScreen(false, true);
         await GameManager.Instance.LoadingController.ToggleScreen(false, false);
     }
 
