@@ -62,3 +62,18 @@ public enum GameMode
     GunRange,
     TimeCrisis
 }
+
+public enum Direction
+{
+    None,
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+public enum RoomType
+{
+    Elbow,
+    Straight
+}

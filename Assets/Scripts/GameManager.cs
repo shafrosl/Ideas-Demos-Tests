@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-    
+
     #if UNITY_EDITOR
     [ButtonMethod()]
     public void SetGameCamera()

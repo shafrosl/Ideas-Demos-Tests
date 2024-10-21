@@ -43,6 +43,8 @@ public class Player : MonoBehaviour, IMovement, IGun
     private float recoilControl;
     private int numOfBulletsCurrent;
     private int numOfBulletsTotal;
+    private int movementPhase;
+    
 
     public int Damage => damage;
     
@@ -166,22 +168,24 @@ public class Player : MonoBehaviour, IMovement, IGun
                 var results = new RaycastHit[16];
                 var size = Physics.RaycastNonAlloc(ray, results);
                 System.Array.Sort(results, (a, b) => (a.distance.CompareTo(b.distance)));
-                if (size < 1) return;
-                foreach (var result in results)
+                if (size > 0)
                 {
-                    if (result.collider is null) continue;
-                    if (!result.collider.CompareTag("Target")) continue;
-                    if (!result.collider.transform.parent.TryGetComponent(out Target target)) continue;
-                    if (result.collider.transform.parent.TryGetComponent<SpriteRenderer>(out var SR))
+                    foreach (var result in results)
                     {
-                        target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), SR,target.transform.localPosition);
-                    }
-                    else
-                    {
-                        target.InstantiateHole(result.transform.InverseTransformPoint(result.point), result.normal);
-                    }
+                        if (result.collider is null) continue;
+                        if (!result.collider.CompareTag("Target")) continue;
+                        if (!result.collider.transform.parent.TryGetComponent(out Target target)) continue;
+                        if (result.collider.transform.parent.TryGetComponent<SpriteRenderer>(out var SR))
+                        {
+                            target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), SR,target.transform.localPosition);
+                        }
+                        else
+                        {
+                            target.InstantiateHole(result.transform.InverseTransformPoint(result.point), result.normal, null, Vector2.zero);
+                        }
                     
-                    break;
+                        break;
+                    }
                 }
                 
                 AnimateShootingHands();
@@ -192,7 +196,6 @@ public class Player : MonoBehaviour, IMovement, IGun
                 GameManager.Instance.HUDController.SetCurrent(numOfBulletsCurrent);
                 GameManager.Instance.HUDController.AnimateShot();
                 DOTween.To(() => pitch, x => pitch = x, pitch - recoilControl, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-
             }
         }
         if (Input.GetMouseButtonUp(0)) isShooting = false;
@@ -236,6 +239,11 @@ public class Player : MonoBehaviour, IMovement, IGun
             GameManager.Instance.HUDController.Heal();
             await OverlaySelector(false);
         }
+    }
+
+    public async void MovePlayer()
+    {
+        
     }
 
     private UniTask ResetOverlay()
