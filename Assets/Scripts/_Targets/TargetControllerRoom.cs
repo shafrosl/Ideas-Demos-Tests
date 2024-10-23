@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using Utility;
+using Random = UnityEngine.Random;
 
 public class TargetControllerRoom : TargetControllerStatic
 {
     public Direction[] Directions;
     public RoomType RoomType;
-    public Direction RoomDirection, OldDirection;
     public int TargetFacing;
     public Transform[] EnemyPos, ObstaclePos;
 
@@ -56,7 +57,7 @@ public class TargetControllerRoom : TargetControllerStatic
             newDir = returnRoom.Directions[0];
         }
 
-        returnRoom.SetRoomRotation(currDir, newDir);
+        returnRoom.SetRoomRotation(currDir);
         return returnRoom;
     }
 
@@ -68,26 +69,25 @@ public class TargetControllerRoom : TargetControllerStatic
             var chance = Random.Range(0, 10);
             if (chance > 6) continue;
             if (!gm.Enemies.IsSafe()) break;
-            var enemy = Instantiate(gm.Enemies[0], ePos.position, Quaternion.identity, ePos);
+            var enemy = Instantiate(gm.Enemies.RandomValue(), ePos.position, Quaternion.identity, ePos);
             enemy.transform.rotation = Quaternion.Euler(0, TargetFacing, 0);
             gm.Targets.Add(enemy);
         }
         
         foreach (var oPos in ObstaclePos)
         {
-            var chance = Random.Range(0, 2);
-            if (chance != 1) continue;
+            var chance = Random.Range(0, 10);
+            if (chance > 8) continue;
             if (!gm.Obstacles.IsSafe()) break;
-            var obs = Instantiate(gm.Obstacles[0], oPos);
+            var obs = Instantiate(gm.Obstacles.RandomValue(), oPos.position, Quaternion.identity, oPos);
+            obs.transform.rotation = quaternion.Euler(0, Random.Range(0, 359), 0);
             gm.Targets.Add(obs);
         }
     }
 
-    private void SetRoomRotation(Direction currDir, Direction newDir)
+    private void SetRoomRotation(Direction currDir)
     {
-        OldDirection = currDir;
-        RoomDirection = newDir;
-        switch (OldDirection)
+        switch (currDir)
         {
             case Direction.Up:
                 TargetFacing = 270;

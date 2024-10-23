@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEditor;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     [ConditionalField(nameof(UICamera), true), SerializeField] public Camera UICamera;
     [ConditionalField(nameof(GameCamera), true), SerializeField] public Camera GameCamera;
+    [ConditionalField(nameof(VirtualCamera), true), SerializeField] public CinemachineVirtualCamera VirtualCamera;
 
     [Header("Data")] 
     public GunObjectData GunData;

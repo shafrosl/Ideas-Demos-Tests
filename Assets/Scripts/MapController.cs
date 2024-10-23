@@ -1,25 +1,35 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MyBox;
+using UnityEditor;
 using UnityEngine;
 using Utility;
 
 public class MapController : MonoBehaviour
 {
-    [SerializeReference] private GameObject Range;
-    [SerializeReference] private GameObject TimeCrisis;
-
+    [Header("Data")]
+    public GameModeData Range;
+    public GameModeData TimeCrisis;
+    
+    [Header("Rooms")]
     public TargetControllerRoom StartingRoom;
     public List<TargetControllerRoom> Rooms;
+    
     private List<TargetControllerRoom> SpawnedRooms = new();
     private GameObject TCParentRoom;
     
     public async UniTask SetMap()
     {
-        if (Range) Range.SetActive(GameManager.Instance.GameMode == GameMode.GunRange);
-        if (TimeCrisis)
+        if (Range.Room)
         {
-            TimeCrisis.SetActive(GameManager.Instance.GameMode == GameMode.TimeCrisis);
+            Range.Room.SetActive(GameManager.Instance.GameMode == GameMode.GunRange);
+            GameManager.Instance.VirtualCamera.transform.position = Range.StartPosition;
+        }
+        
+        if (TimeCrisis.Room)
+        {
+            TimeCrisis.Room.SetActive(GameManager.Instance.GameMode == GameMode.TimeCrisis);
+            GameManager.Instance.VirtualCamera.transform.position = TimeCrisis.StartPosition;
             await GenerateTCMap();
         }
     }
@@ -33,13 +43,14 @@ public class MapController : MonoBehaviour
         {
             transform =
             {
-                parent = TimeCrisis.transform
+                parent = TimeCrisis.Room.transform
             }
         };
 
         var currDir = Direction.Right;
         var x = 0;
         var z = 0;
+        var numOfTries = 10;
         for (var i = 0; i < 10; i++)
         {
             TargetControllerRoom room;
@@ -66,8 +77,6 @@ public class MapController : MonoBehaviour
             if (i == 0)
             {
                 room = StartingRoom;
-                room.RoomDirection = Direction.Right;
-                room.OldDirection = Direction.None;
             }
             else
             {
@@ -98,8 +107,14 @@ public class MapController : MonoBehaviour
                 
                 if (c > 0)
                 {
-                    DebugExtensions.Log(i + ": " + room.name + " c = " + c + " dir: " + newDir);
                     i--;
+                    numOfTries--;
+                    if (numOfTries < 0)
+                    {
+                        Debug.Log("failed");
+                        EditorApplication.ExitPlaymode();
+                        return UniTask.CompletedTask;
+                    }
                     continue;
                 }
                 currDir = newDir;
@@ -107,10 +122,10 @@ public class MapController : MonoBehaviour
             
             x = tempX;
             z = tempZ;
-            DebugExtensions.Log(i + ": " + pos + " dir: " + currDir);
             var newRoom = Instantiate(room, pos, Quaternion.identity, TCParentRoom.transform);
             newRoom.SpawnObjects();
             SpawnedRooms.Add(newRoom);
+            numOfTries = 10;
         }
 
         return UniTask.CompletedTask;

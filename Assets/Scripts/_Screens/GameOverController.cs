@@ -6,7 +6,7 @@ using Utility;
 
 public class GameOverController : BaseController
 {
-    public TextMeshProUGUI Title, Score, Verdict;
+    public TextMeshProUGUI Header, Title, Score, Verdict;
     public Button ReturnToGunSelectBtn;
 
     private void Start() => Initialize();
@@ -105,16 +105,31 @@ public class GameOverController : BaseController
 
     private void ShowScore()
     {
+        var score = GameManager.Instance.PlayerStats.Score;
         switch (GameManager.Instance.GameMode)
         {
             case GameMode.GunRange:
-                var score = GameManager.Instance.PlayerStats.Score;
+                Header.text = "Some things we saw...";
                 Title.text = "Head Shots\nBody Shots\nMissed Shots\nTotal Shots\nAccuracy\nScore";
-                Score.text = score.HeadShots + "\n" + score.BodyShots + "\n" + score.GetMisses() + "\n" +
-                             score.TotalShots + "\n" + score.GetAccuracy() + "%\n" + score.GetScore();
+                Score.text = score.HeadShots + "\n" + 
+                             score.BodyShots + "\n" + 
+                             score.GetMisses() + "\n" +
+                             score.TotalShots + "\n" + 
+                             score.GetAccuracy() + "%\n" + 
+                             score.GetScore();
                 score.GetVerdict(Verdict);
                 break;
             case GameMode.TimeCrisis:
+                Header.text = "Game Over";
+                Title.text = "Kills\nHead Shots\nBody Shots\nMissed Shots\nTotal Shots\nAccuracy\nScore";
+                Score.text = score.Kills + "\n" + 
+                             score.HeadShots + "\n" + 
+                             score.BodyShots + "\n" + 
+                             score.GetMisses() + "\n" + 
+                             score.TotalShots + "\n" + 
+                             score.GetAccuracy() + "%\n" + 
+                             score.GetScore();
+                score.GetVerdict(Verdict);
                 break;
             case GameMode.NotSelected:
                 break;

@@ -35,8 +35,9 @@ public class Player : MonoBehaviour, IMovement, IGun
     [MinMaxRange(-50, 50)] public RangedFloat range;
     public float speedH = 2.0f;
     public float speedV = 2.0f;
-    private float yaw, pitch;
+    public float yaw, pitch;
 
+    private float internalProtectionCooldownTimer;
     private int damage;
     private float fireRateCooldownTimer;
     private float internalFireRateCooldownTimer;
@@ -102,7 +103,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             if (pitch > range.Max) pitch = range.Max;
             else if (pitch < range.Min) pitch = range.Min;
         }
-        Cinemachine.transform.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+        Cinemachine.transform.rotation = Quaternion.Euler(pitch, yaw, 0.0f);
     }
 
     public async void Hide()
@@ -118,7 +119,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             }
             isHiding = true;
             
-            DOTween.To(() => pitch, x => pitch = x, 20f, 0.25f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            DOTween.To(() => pitch, x => pitch = x, 40f, 0.25f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             await PlayerSpriteGroup.DOLocalMoveY(-0.2f, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             isHiding = false;
             isHidden = true;
@@ -174,7 +175,7 @@ public class Player : MonoBehaviour, IMovement, IGun
                         if (!result.collider.transform.parent.TryGetComponent(out Target target)) continue;
                         if (result.collider.transform.parent.TryGetComponent<SpriteRenderer>(out var SR))
                         {
-                            target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + target.transform.parent.position), SR,target.transform.localPosition);
+                            target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + Vector3.up), SR,target.transform.localPosition);
                         }
                         else
                         {
@@ -211,13 +212,15 @@ public class Player : MonoBehaviour, IMovement, IGun
 
     public async void OnHit()
     {
+        if (internalProtectionCooldownTimer > 0) internalProtectionCooldownTimer -= Time.deltaTime;
         if (!isHit) return;
         isHit = false;
-        if (!isHidden)
+        if (!isHidden && internalProtectionCooldownTimer <= 0)
         {
             if (GameManager.Instance.PlayerStats.Damage())
             {
                 // play hit sfx
+                internalProtectionCooldownTimer = 6;
                 HitImpulse.GenerateImpulseWithForce(0.15f);
                 GameManager.Instance.HUDController.Hit();
                 await OverlaySelector(true);

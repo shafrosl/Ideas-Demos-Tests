@@ -99,6 +99,7 @@ public class Score
                 }
                 break;
             case GameMode.TimeCrisis:
+                Text.text = "You made it to level " + "xx";
                 break;
         }
     }
