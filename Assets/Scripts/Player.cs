@@ -6,11 +6,11 @@ using DG.Tweening;
 using MyBox;
 using UnityEngine;
 using Utility;
-using Debug = Utility.Debug;
 
 public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform BulletExit;
+    public Collider Collider;
     public ParticleSystem MuzzleFlash;
     public CinemachineVirtualCamera Cinemachine;
     public CinemachineImpulseSource RecoilImpulse;
@@ -164,10 +164,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             if (isShooting)
             {
                 internalFireRateCooldownTimer = fireRateCooldownTimer;
-                var ray = new Ray(BulletExit.position, GameManager.Instance.GameCamera.transform.forward);
-                var results = new RaycastHit[16];
-                var size = Physics.RaycastNonAlloc(ray, results);
-                System.Array.Sort(results, (a, b) => (a.distance.CompareTo(b.distance)));
+                var results = RayExtensions.GetRaycastHits3D(BulletExit.position, GameManager.Instance.GameCamera.transform.forward, out var size); 
                 if (size > 0)
                 {
                     foreach (var result in results)
@@ -284,7 +281,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     {
         if (Application.isPlaying)
         {
-            Debug.DrawLine(BulletExit.position, GameManager.Instance.GameCamera.transform.forward, 100, Color.red);
+            DebugExtensions.DrawLine(BulletExit.position, GameManager.Instance.GameCamera.transform.forward, 100, Color.red);
         }
     }
 }

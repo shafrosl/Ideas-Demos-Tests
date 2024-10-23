@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using Utility;
-using Debug = Utility.Debug;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,7 @@ public class GunBodyItem : GunPartItem
         var bodyData = GunData.Bodies;
         if (ItemID < 0 && ItemID > bodyData.Count - 1)
         {
-            Debug.Log( "Item not found. ID: " + ItemID);
+            DebugExtensions.Log( "Item not found. ID: " + ItemID);
             return;
         }
 
@@ -39,7 +38,7 @@ public class GunBodyItem : GunPartItem
             {
                 if (bodyData.ElementAtOrDefault(ItemID) is not null)
                 {
-                    Debug.Log(ItemName + " already created. ID: " + ItemID);
+                    DebugExtensions.Log(ItemName + " already created. ID: " + ItemID);
                     return;
                 }
             }
@@ -47,14 +46,14 @@ public class GunBodyItem : GunPartItem
             foreach (var body in bodyData)
             {
                 if (body.Name != ItemName) continue;
-                Debug.Log(ItemName + " name already taken. ID: " + ItemID);
+                DebugExtensions.Log(ItemName + " name already taken. ID: " + ItemID);
                 return;
             }
 
             ItemID = bodyData.Count;
             var newBody = new BodyObject(GunPart, ItemID, ItemName, ItemIcon, GemSlotPosition, Stats);
             bodyData.Add(newBody);
-            Debug.Log(ItemName + " created with type " + GunPart + " with and ID " + ItemID);
+            DebugExtensions.Log(ItemName + " created with type " + GunPart + " with and ID " + ItemID);
             ItemID = -1;
         }
         else
@@ -62,7 +61,7 @@ public class GunBodyItem : GunPartItem
             ItemID = 0;
             var newBody = new BodyObject(GunPart, ItemID, ItemName, ItemIcon, GemSlotPosition, Stats);
             GunData.Bodies = new List<BodyObject>(1) { newBody };
-            Debug.Log(ItemName + " created with type " + GunPart + " with ID " + ItemID);
+            DebugExtensions.Log(ItemName + " created with type " + GunPart + " with ID " + ItemID);
             ItemID = -1;
         }
         
@@ -77,11 +76,11 @@ public class GunBodyItem : GunPartItem
         if (GunData.Bodies.IsSafe())
         {
             var bodyData = GunData.Bodies;
-            Debug.Log(bodyData[ItemID].Name + " updating from type " + bodyData[ItemID].GunPart + " with ID " + ItemID + "...");
+            DebugExtensions.Log(bodyData[ItemID].Name + " updating from type " + bodyData[ItemID].GunPart + " with ID " + ItemID + "...");
 
             if (ItemID < 0 || ItemID > bodyData.Count - 1)
             {
-                Debug.Log(ItemName + " not found. ID: " + ItemID);
+                DebugExtensions.Log(ItemName + " not found. ID: " + ItemID);
                 return;
             }
             
@@ -89,13 +88,13 @@ public class GunBodyItem : GunPartItem
             {
                 if (body.Name != ItemName) continue;
                 if (ItemID == body.ID) continue;
-                Debug.Log(ItemName + " name already taken. ID: " + ItemID);
+                DebugExtensions.Log(ItemName + " name already taken. ID: " + ItemID);
                 return;
             }
 
             var updateBody = new BodyObject(GunPart, ItemID, ItemName, ItemIcon, GemSlotPosition, Stats);
             bodyData[ItemID] = updateBody;
-            Debug.Log(ItemName + " updated with type " + GunPart + " with ID " + ItemID);
+            DebugExtensions.Log(ItemName + " updated with type " + GunPart + " with ID " + ItemID);
             EditorUtility.SetDirty(GunData);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();

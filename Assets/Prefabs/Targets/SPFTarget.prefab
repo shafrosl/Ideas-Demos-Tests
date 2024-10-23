@@ -6380,7 +6380,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &5647666323383718556
 GameObject:
@@ -6961,18 +6961,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be80663b04e440808a7f90f7658af00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletExit: {fileID: 6040587116297284222}
   Rigidbody: {fileID: 867114663904709823}
+  BulletExit: {fileID: 6040587116297284222}
   MuzzleFlash: {fileID: 5552947184848590624}
-  isMoving: 0
   IsPingPong: 0
   PingPongAxis: 0
   PingPongValues: {x: 0, y: 0}
   PingPongSpeed: {x: 0, y: 0}
   PingPongDelayBetween: 0
   Chance: 0.369
-  DistanceToShoot: 50
-  ShootCountdownTimer: 5
+  DistanceToShoot: 500
+  ShootCountdownTimer: 10
   HeadShot: {fileID: 0}
   BodyShot: {fileID: 0}
 --- !u!54 &867114663904709823
@@ -7615,7 +7614,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -577876327
   m_SortingLayer: 2
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -1705797266, guid: b51ea3fb6ec144580a61808bc039bc2d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

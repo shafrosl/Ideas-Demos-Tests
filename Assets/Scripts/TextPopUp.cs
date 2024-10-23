@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using Debug = Utility.Debug;
 
 public class TextPopUp : MonoBehaviour
 {

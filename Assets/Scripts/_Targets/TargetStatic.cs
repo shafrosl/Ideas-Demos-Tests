@@ -6,7 +6,6 @@ public class TargetStatic : Target
 {
     public override UniTask InstantiateHole(Vector3 position, Vector3 normal, SpriteRenderer SR, Vector2 offset)
     {
-        var randHole = Random.Range(0, GameManager.Instance.BulletHoles.Length);
         var randZ = Random.Range(0, 360);
         var holeObj = new GameObject("Hole")
         {
@@ -21,7 +20,7 @@ public class TargetStatic : Target
 
         holeObj.transform.localEulerAngles.Modify(z: randZ);
         var holeRenderer = holeObj.AddComponent<SpriteRenderer>();
-        holeRenderer.sprite = GameManager.Instance.BulletHoles[randHole];
+        holeRenderer.sprite = GameManager.Instance.BulletHoles.RandomValue();
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount;
         GameManager.Instance.Holes.Add(holeObj);

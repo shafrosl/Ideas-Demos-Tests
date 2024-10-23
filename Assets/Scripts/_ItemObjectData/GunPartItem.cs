@@ -3,7 +3,6 @@ using MyBox;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
-using Debug = Utility.Debug;
 
 [CreateAssetMenu(fileName = "GunPart", menuName = "CreateItems/GunPart", order = 1)]
 public class GunPartItem : BaseItem

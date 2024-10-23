@@ -1,17 +1,16 @@
 using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEngine;
-using Debug = Utility.Debug;
+using Utility;
 using Random = UnityEngine.Random;
 
-public class Target : MonoBehaviour, IBulletHole, IScore
+public abstract class Target : MonoBehaviour, IBulletHole, IScore
 {
     [ConditionalField(nameof(TargetController), true), SerializeField] public BaseTargetController TargetController;
     protected int holeCount;
 
     public virtual UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
     {
-        var randHole = Random.Range(0, GameManager.Instance.BulletHoles.Length);
         var randZ = Random.Range(0, 360);
         var holeObj = new GameObject("Hole")
         {
@@ -25,7 +24,7 @@ public class Target : MonoBehaviour, IBulletHole, IScore
         };
 
         var holeRenderer = holeObj.AddComponent<SpriteRenderer>();
-        holeRenderer.sprite = GameManager.Instance.BulletHoles[randHole];
+        holeRenderer.sprite = GameManager.Instance.BulletHoles.RandomValue();
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount + SR.sortingOrder;
         GameManager.Instance.Holes.Add(holeObj);

@@ -3,7 +3,6 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
-using Debug = Utility.Debug;
 
 public class SettingsController : BaseController
 {
@@ -23,6 +22,11 @@ public class SettingsController : BaseController
             if (GameManager.Instance.Holes.IsSafe())
             {
                 foreach (var hole in GameManager.Instance.Holes) Destroy(hole);
+            }
+            
+            if (GameManager.Instance.GameMode == GameMode.TimeCrisis)
+            {
+                GameManager.Instance.MapController.ClearMap();
             }
 
             if (GameManager.Instance.GemsInGame.IsSafe())

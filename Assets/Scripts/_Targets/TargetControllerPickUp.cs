@@ -2,10 +2,9 @@ using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using Debug = Utility.Debug;
 
 [RequireComponent(typeof(HingeJoint))]
-public class TargetControllerPickUp : BaseTargetController
+public abstract class TargetControllerPickUp : BaseTargetController
 {
     public float yPosBase;
     public SpriteRenderer SR;

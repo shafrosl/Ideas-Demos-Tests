@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEngine;
+using Utility;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "GemData", menuName = "ItemObjectData/GemData", order = 2)]
@@ -17,18 +18,18 @@ public class GemObjectData : ItemObjectData
     public UniTask<List<GemColorValue>> GetGem()
     {
         var chance = Random.Range(0, 100);
-        var randomCombo = Random.Range(0, GemTierCombos.Count);
+        var randomCombo = GemTierCombos.RandomValue();
         
-        while (chance > GemTierCombos[randomCombo].Chance)
+        while (chance > randomCombo.Chance)
         {
-            randomCombo = Random.Range(0, GemTierCombos.Count);
+            randomCombo = GemTierCombos.RandomValue();
         }
         
-        List<GemColorValue> GCL = new(GemTierCombos[randomCombo].Range.Count);
+        List<GemColorValue> GCL = new(randomCombo.Range.Count);
         for (var i = 0; i < GCL.Capacity; i++)
         {
             var redo = false;
-            var gclObj = GemColorValues[Random.Range(0, GemColorValues.Count)];
+            var gclObj = GemColorValues.RandomValue();
             foreach (var g in GCL)
             {
                 if (gclObj.Modifier == g.Modifier) redo = true;
@@ -40,7 +41,7 @@ public class GemObjectData : ItemObjectData
                 continue;
             }
             
-            gclObj.RandomizeGem(GemTierCombos[randomCombo].Range[i]);
+            gclObj.RandomizeGem(randomCombo.Range[i]);
             GCL.Add(gclObj);
         }
 

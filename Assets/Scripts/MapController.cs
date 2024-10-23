@@ -1,31 +1,35 @@
-using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEngine;
 using Utility;
-using Debug = Utility.Debug;
 
 public class MapController : MonoBehaviour
 {
     [SerializeReference] private GameObject Range;
     [SerializeReference] private GameObject TimeCrisis;
 
-    public GameObject StartingRoom;
-    public List<GameObject> Rooms;
-    private List<GameObject> SpawnedRooms = new();
+    public TargetControllerRoom StartingRoom;
+    public List<TargetControllerRoom> Rooms;
+    private List<TargetControllerRoom> SpawnedRooms = new();
+    private GameObject TCParentRoom;
     
-    public void SetMap()
+    public async UniTask SetMap()
     {
         if (Range) Range.SetActive(GameManager.Instance.GameMode == GameMode.GunRange);
-        if (TimeCrisis) TimeCrisis.SetActive(GameManager.Instance.GameMode == GameMode.TimeCrisis);
+        if (TimeCrisis)
+        {
+            TimeCrisis.SetActive(GameManager.Instance.GameMode == GameMode.TimeCrisis);
+            await GenerateTCMap();
+        }
     }
     
     
     [ButtonMethod()]
-    public void GenerateMap()
+    public UniTask GenerateTCMap()
     {
         if (SpawnedRooms.IsSafe()) SpawnedRooms.Clear();
-        var parent = new GameObject("Rooms")
+        TCParentRoom = new GameObject("Rooms")
         {
             transform =
             {
@@ -38,7 +42,7 @@ public class MapController : MonoBehaviour
         var z = 0;
         for (var i = 0; i < 10; i++)
         {
-            GameObject room;
+            TargetControllerRoom room;
             Vector3 pos = Vector3.zero;
             var tempX = x;
             var tempZ = z;
@@ -62,17 +66,19 @@ public class MapController : MonoBehaviour
             if (i == 0)
             {
                 room = StartingRoom;
+                room.RoomDirection = Direction.Right;
+                room.OldDirection = Direction.None;
             }
-            else 
+            else
             {
-                room = SpawnedRooms[^1].GetComponent<TargetControllerRoom>().GetNextRoom(Rooms, currDir, out var newDir);
+                room = SpawnedRooms[^1].GetNextRoom(Rooms, currDir, out var newDir);
                 if (room is null)
                 {
                     i--;
                     continue;
                 }
                 
-                Collider[] results = new Collider[4];
+                var results = new Collider[4];
                 var c = 0;
                 switch (newDir)
                 {
@@ -92,7 +98,7 @@ public class MapController : MonoBehaviour
                 
                 if (c > 0)
                 {
-                    Debug.Log(i + ": " + room.name + " c = " + c + " dir: " + newDir);
+                    DebugExtensions.Log(i + ": " + room.name + " c = " + c + " dir: " + newDir);
                     i--;
                     continue;
                 }
@@ -101,9 +107,29 @@ public class MapController : MonoBehaviour
             
             x = tempX;
             z = tempZ;
-            Debug.Log(i + ": " + pos + " dir: " + currDir);
-            Instantiate(room, pos, Quaternion.identity, parent.transform);
-            SpawnedRooms.Add(room);
+            DebugExtensions.Log(i + ": " + pos + " dir: " + currDir);
+            var newRoom = Instantiate(room, pos, Quaternion.identity, TCParentRoom.transform);
+            newRoom.SpawnObjects();
+            SpawnedRooms.Add(newRoom);
+        }
+
+        return UniTask.CompletedTask;
+    }
+
+    public void ClearMap()
+    {
+        if (GameManager.Instance.Targets.IsSafe())
+        {
+            foreach (var target in GameManager.Instance.Targets) Destroy(target);
+            GameManager.Instance.Targets.Clear();
+        }
+
+        if (SpawnedRooms.IsSafe())
+        {
+            foreach (var room in SpawnedRooms) Destroy(room.gameObject);
+            SpawnedRooms.Clear();
+            Destroy(TCParentRoom);
+            TCParentRoom = null;
         }
     }
 }

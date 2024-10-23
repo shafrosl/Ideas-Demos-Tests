@@ -113,14 +113,14 @@ public class GunObjectData : ItemObjectData
             return false;
         }
         
-        var randI = Random.Range(0, Barrels.Count);
-        barrel = new GameObject(Barrels[randI].Name);
+        var randBarrel = Barrels.RandomValue();
+        barrel = new GameObject(randBarrel.Name);
         var objI = barrel.AddComponent<Image>();
-        GameManager.Instance.PlayerStats.CurrBarrelObj.Set(Barrels[randI]);
-        objI.sprite = Barrels[randI].Icon;
+        GameManager.Instance.PlayerStats.CurrBarrelObj.Set(randBarrel);
+        objI.sprite = randBarrel.Icon;
         objI.preserveAspect = true;
         objI.SetNativeSize();
-        SlotChance(barrel.transform, Barrels[randI].GemSlotPosition);
+        SlotChance(barrel.transform, randBarrel.GemSlotPosition);
         return true;
     }
     
@@ -132,14 +132,14 @@ public class GunObjectData : ItemObjectData
             return false;
         }
         
-        var randI = Random.Range(0, Barrels.Count);
-        stock = new GameObject(Stocks[randI].Name);
+        var randStock = Stocks.RandomValue();
+        stock = new GameObject(randStock.Name);
         var objI = stock.AddComponent<Image>();
-        GameManager.Instance.PlayerStats.CurrStockObj.Set(Stocks[randI]);
-        objI.sprite = Stocks[randI].Icon;
+        GameManager.Instance.PlayerStats.CurrStockObj.Set(randStock);
+        objI.sprite = randStock.Icon;
         objI.preserveAspect = true;
         objI.SetNativeSize();
-        SlotChance(stock.transform, Stocks[randI].GemSlotPosition);
+        SlotChance(stock.transform, randStock.GemSlotPosition);
         return true;
     }
 

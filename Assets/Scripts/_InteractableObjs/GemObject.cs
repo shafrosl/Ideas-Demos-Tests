@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utility;
-using Debug = Utility.Debug;
 
 public class GemObject : DraggableObject
 {
@@ -17,7 +16,7 @@ public class GemObject : DraggableObject
     {
         base.Initialize();
         Mods = await GameManager.Instance.GemData.GetGem();
-        var children = Transforms.GetAllChildrenInTransform(transform, out _);
+        var children = transform.GetAllChildrenInTransform(out _);
 
         var j = 0;
         for (var i = 0; i < 5; i++)
@@ -33,7 +32,7 @@ public class GemObject : DraggableObject
         if (!mods.IsSafe()) return UniTask.CompletedTask;
         base.Initialize();
         Mods = mods;
-        var children = Transforms.GetAllChildrenInTransform(transform, out _);
+        var children = transform.GetAllChildrenInTransform(out _);
         var j = 0;
         for (var i = 0; i < 5; i++)
         {

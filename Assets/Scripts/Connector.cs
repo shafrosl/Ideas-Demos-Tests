@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Utility;
-using Debug = Utility.Debug;
 
 [Serializable]
 public class Connector

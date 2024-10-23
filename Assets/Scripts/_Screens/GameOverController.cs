@@ -81,6 +81,11 @@ public class GameOverController : BaseController
             foreach (var hole in GameManager.Instance.Holes) Destroy(hole);
         }
 
+        if (GameManager.Instance.GameMode == GameMode.TimeCrisis)
+        {
+            GameManager.Instance.MapController.ClearMap();
+        }
+
         if (GameManager.Instance.GemsInGame.IsSafe())
         {
             var restored = await GameManager.Instance.GunSelectController.GemScreen.RestoreGems();

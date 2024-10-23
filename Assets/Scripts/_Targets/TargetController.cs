@@ -1,9 +1,8 @@
-using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
 using UnityEngine;
-using Debug = Utility.Debug;
+using Utility;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(HingeJoint))]
@@ -22,7 +21,6 @@ public class TargetController : BaseTargetController
     [Range(0.0f, 1.0f)] public float Chance;
     public float DistanceToShoot;
     public float ShootCountdownTimer;
-    private bool firstShotTaken;
     
     [HideInInspector] public TextPopUp HeadShot;
     [HideInInspector] public TextPopUp BodyShot;
@@ -32,10 +30,9 @@ public class TargetController : BaseTargetController
     protected override UniTask Initialize()
     {
         if (isInitialized) return UniTask.CompletedTask;
-        firstShotTaken = false;
-        internalCountdown = ShootCountdownTimer + 10;
+        internalCountdown = Random.Range(ShootCountdownTimer/2, ShootCountdownTimer*2);
         PingPongAtStart();
-        GameManager.Instance.Targets.Add(this);
+        GameManager.Instance.Targets.Add(transform.parent.gameObject);
         return base.Initialize();
     }
     
@@ -47,33 +44,32 @@ public class TargetController : BaseTargetController
         else
         {
             Shoot();
-            internalCountdown = ShootCountdownTimer;
+            internalCountdown = Random.Range(1.0f, ShootCountdownTimer);
         }
         
         return UniTask.CompletedTask;
     }
-
+    
     private void Shoot()
     {
-        if (!GameManager.Instance.GameStarted) return;
-        if (GameManager.Instance.GameMode == GameMode.GunRange) return;
+        var gm = GameManager.Instance;
+        if (!gm.GameStarted) return;
+        if (gm.GameMode == GameMode.GunRange) return;
         if (!inShootingRange) return;
         MuzzleFlash.transform.localEulerAngles = PositionDotValue < 0 ? new Vector3(0, 180, 0) : new Vector3(0, 0, 0);
         MuzzleFlash.Play();
         // play shoot sfx
-        var hit = Random.Range(0.0f, 1.0f);
+        var hit = (Random.Range(0.0f, 0.01f)) * Distance;
         if (hit > Chance)
         {
             // play miss sfx
         }
         else
         {
-            if (!firstShotTaken)
-            {
-                firstShotTaken = true;
-                return;
-            }
-            GameManager.Instance.PlayerController.isHit = true;
+            var hitInfo = RayExtensions.GetRaycastHit3D(BulletExit.position, gm.PlayerController.Collider.transform.position - BulletExit.position);
+            if (hitInfo.collider is null) return;
+            if (hitInfo.collider != gm.PlayerController.Collider) return;
+            gm.PlayerController.isHit = true;
         }
     }
 
@@ -171,14 +167,6 @@ public class TargetController : BaseTargetController
             case Axis.ZX:
                 MovePingPongZX(PingPongValues, PingPongSpeed.x == 0 ? null : PingPongSpeed.x, PingPongSpeed.y == 0 ? null : PingPongSpeed.y, PingPongDelayBetween);
                 break;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (Application.isPlaying)
-        {
-            Debug.DrawLine(BulletExit.position, GameManager.Instance.PlayerController.transform.position - transform.position, DistanceToShoot, Color.blue);
         }
     }
 }

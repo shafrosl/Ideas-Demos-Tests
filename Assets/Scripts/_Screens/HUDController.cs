@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
-using Debug = Utility.Debug;
 
 public class HUDController : BaseController
 {

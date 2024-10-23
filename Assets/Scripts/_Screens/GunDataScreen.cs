@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Utility;
-using Debug = Utility.Debug;
 
 public class GunDataScreen : BaseScreen
 {

@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEngine.UI;
-using Debug = Utility.Debug;
 
 public class GunSelectController : BaseController
 {

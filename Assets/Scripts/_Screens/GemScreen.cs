@@ -6,7 +6,6 @@ using MyBox;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
-using Debug = Utility.Debug;
 
 public class GemScreen : BaseScreen
 {

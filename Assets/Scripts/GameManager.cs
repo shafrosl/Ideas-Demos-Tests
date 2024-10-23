@@ -5,7 +5,6 @@ using MyBox;
 using UnityEditor;
 using UnityEngine;
 using Utility;
-using Debug = Utility.Debug;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,8 +19,8 @@ public class GameManager : MonoBehaviour
     public PlayerStats PlayerStats;
     public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
     public List<GameObject> Holes = new();
-    public List<TargetController> Targets = new();
-    
+    public List<GameObject> Targets = new();
+
     [Header("Game Colors")] 
     public Color Black;
     public Color White;
@@ -33,6 +32,8 @@ public class GameManager : MonoBehaviour
     [Header("Shared Assets")] 
     public Sprite[] BulletHoles;
     public GameObject Sparks;
+    public GameObject[] Enemies;
+    public GameObject[] Obstacles;
 
     [Header("Game States")] 
     public GameMode GameMode = GameMode.NotSelected;
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour
         InGame = GameStarted = true;
         PlayerController.lockMovement = true;
         PlayerStats = new PlayerStats(PlayerStats);
-        MapController.SetMap();
+        await MapController.SetMap();
         await ToggleCursorLock(true);
         await HUDController.FadeCover(false);
         await GunSelectController.StartGame();

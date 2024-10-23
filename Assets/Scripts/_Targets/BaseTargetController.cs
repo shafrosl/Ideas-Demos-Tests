@@ -1,7 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Debug = Utility.Debug;
 
 [RequireComponent(typeof(Rigidbody))]
 public abstract class BaseTargetController : MonoBehaviour
