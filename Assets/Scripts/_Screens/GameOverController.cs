@@ -75,11 +75,7 @@ public class GameOverController : BaseController
         if (!GameManager.Instance.GunSelectController) return;
         await GameManager.Instance.LoadingController.ToggleScreen(false, true);
         await ToggleScreen(false,false);
-        
-        if (GameManager.Instance.Holes.IsSafe())
-        {
-            foreach (var hole in GameManager.Instance.Holes) Destroy(hole);
-        }
+        await GameManager.Instance.PoolController.ClearPool();
 
         if (GameManager.Instance.GameMode == GameMode.TimeCrisis)
         {

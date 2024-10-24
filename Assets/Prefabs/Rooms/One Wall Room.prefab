@@ -74,6 +74,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 3626879066744836271}
+  Directions: 
+  RoomType: 0
+  TargetFacing: 0
+  EnemyPos: []
+  ObstaclePos: []
 --- !u!1 &795505368860010774
 GameObject:
   m_ObjectHideFlags: 0
@@ -86,7 +91,7 @@ GameObject:
   - component: {fileID: 1830889012000689273}
   m_Layer: 0
   m_Name: Collider (3)
-  m_TagString: Target
+  m_TagString: StaticTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +144,7 @@ GameObject:
   - component: {fileID: 2873665748277311718}
   m_Layer: 0
   m_Name: Collider (4)
-  m_TagString: Target
+  m_TagString: StaticTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -171,15 +171,15 @@ public class Player : MonoBehaviour, IMovement, IGun
                     foreach (var result in results)
                     {
                         if (result.collider is null) continue;
-                        if (!result.collider.CompareTag("Target")) continue;
+                        if (!result.collider.CompareTag("Target") && !result.collider.CompareTag("StaticTarget")) continue;
                         if (!result.collider.transform.parent.TryGetComponent(out BaseTarget target)) continue;
                         if (result.collider.transform.parent.TryGetComponent<SpriteRenderer>(out var SR))
                         {
-                            target.InstantiateHole(result.transform.InverseTransformPoint(result.point), (result.point + Vector3.up), SR,target.transform.localPosition);
+                            target.InstantiateHole((result.point + Vector3.up), SR,target.transform.localPosition);
                         }
                         else
                         {
-                            target.InstantiateHole(result.transform.InverseTransformPoint(result.point), result.normal, null, Vector2.zero);
+                            target.InstantiateHole(result.point, null, result.normal);
                         }
                     
                         break;
@@ -267,7 +267,7 @@ public class Player : MonoBehaviour, IMovement, IGun
             else
             {
                 results[i].gameObject.SetActive(show);
-                await results[i].DOFade(show ? 1 : 0, 0.2f);
+                await results[i].DOFade(show ? 0.75f : 0, 0.2f);
                 break;
             }
         }

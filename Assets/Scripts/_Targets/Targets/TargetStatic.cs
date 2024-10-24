@@ -1,29 +1,11 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Utility;
 
 public class TargetStatic : BaseTarget
 {
-    public override UniTask InstantiateHole(Vector3 position, Vector3 normal, SpriteRenderer SR, Vector2 offset)
+    public override UniTask InstantiateHole(Vector3 worldPosition, SpriteRenderer SR, Vector3 normal)
     {
-        var randZ = Random.Range(0, 360);
-        var holeObj = new GameObject("Hole")
-        {
-            transform =
-            {
-                parent = transform.parent,
-                localPosition = position + (normal * 0.01f),
-                localRotation = Quaternion.FromToRotation(Vector3.forward, normal),
-                localScale = Vector3.one,
-            }
-        };
-
-        holeObj.transform.localEulerAngles.Modify(z: randZ);
-        var holeRenderer = holeObj.AddComponent<SpriteRenderer>();
-        holeRenderer.sprite = GameManager.Instance.BulletHoles.RandomValue();
-        holeRenderer.sortingLayerName = "In Front";
-        holeRenderer.sortingOrder = ++holeCount;
-        GameManager.Instance.Holes.Add(holeObj);
+        var holeObj = GameManager.Instance.PoolController.InstantiateHole(transform, worldPosition, normal, holeCount++, out var holeRenderer);
         var spark = GameManager.Instance.PoolController.InstantiateSparks(holeObj.transform.position, holeObj.transform.rotation);
         if (spark.TryGetComponent(out ParticleSystemRenderer ps))
         {

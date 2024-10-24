@@ -241,7 +241,7 @@ GameObject:
   - component: {fileID: 7412134151405381963}
   m_Layer: 0
   m_Name: Collider (3)
-  m_TagString: Target
+  m_TagString: StaticTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 8544437384449601221}
   m_Layer: 0
   m_Name: Collider (1)
-  m_TagString: Target
+  m_TagString: StaticTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -506,7 +506,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 1554950046447393787}
-  Collider: {fileID: 0}
   Directions: 0400000002000000
   RoomType: 0
   TargetFacing: 0
@@ -592,7 +591,7 @@ GameObject:
   - component: {fileID: 3260711389516633866}
   m_Layer: 0
   m_Name: Collider (4)
-  m_TagString: Target
+  m_TagString: StaticTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

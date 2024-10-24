@@ -42,7 +42,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8924767682134453671}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 10
   m_Drag: 2
   m_AngularDrag: 1.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -75,6 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 2553485943653905328}
   HitsAllowed: 3
+  ExplodeParticles: {fileID: 0}
 --- !u!1 &9122611011577824817
 GameObject:
   m_ObjectHideFlags: 0

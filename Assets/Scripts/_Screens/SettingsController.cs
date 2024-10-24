@@ -19,11 +19,7 @@ public class SettingsController : BaseController
         
         if (GameManager.Instance.GameStarted)
         {
-            if (GameManager.Instance.Holes.IsSafe())
-            {
-                foreach (var hole in GameManager.Instance.Holes) Destroy(hole);
-            }
-            
+            GameManager.Instance.PoolController.ClearPool();
             if (GameManager.Instance.GameMode == GameMode.TimeCrisis)
             {
                 GameManager.Instance.MapController.ClearMap();

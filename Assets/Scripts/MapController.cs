@@ -23,13 +23,13 @@ public class MapController : MonoBehaviour
         if (Range.Room)
         {
             Range.Room.SetActive(GameManager.Instance.GameMode == GameMode.GunRange);
-            GameManager.Instance.VirtualCamera.transform.position = Range.StartPosition;
+            GameManager.Instance.PlayerController.Cinemachine.transform.position = Range.StartPosition;
         }
         
         if (TimeCrisis.Room)
         {
             TimeCrisis.Room.SetActive(GameManager.Instance.GameMode == GameMode.TimeCrisis);
-            GameManager.Instance.VirtualCamera.transform.position = TimeCrisis.StartPosition;
+            GameManager.Instance.PlayerController.Cinemachine.transform.position = TimeCrisis.StartPosition;
             await GenerateTCMap();
         }
     }

@@ -230,6 +230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3eada7a6c4f4ae3b6c72b6c3cedb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BulletHoles:
+  - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
+  - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
   TextPopUp: {fileID: 3290634921181273748, guid: e261902dd9a624f17aa952f48231733c, type: 3}
   Spark: {fileID: 6084345840790899362, guid: 0b39d0c3de8ca41339e923b2908ebad9, type: 3}
 --- !u!1 &34096691
@@ -1318,7 +1321,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UICamera: {fileID: 519420031}
   GameCamera: {fileID: 1975693166}
-  VirtualCamera: {fileID: 782805180}
   GunData: {fileID: 0}
   GemData: {fileID: 0}
   PlayerStats:
@@ -1361,35 +1363,13 @@ MonoBehaviour:
       Mistakes: 0
     Health: 0
     FullHealth: 0
-  Holes: []
-  Targets:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  Targets: []
   Black: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   White: {r: 0.98039216, g: 0.98039216, b: 0.98039216, a: 1}
   Red: {r: 1, g: 0.3820755, b: 0.3820755, a: 1}
   Green: {r: 0.35684407, g: 0.764151, b: 0.5957974, a: 1}
   Blue: {r: 0.3915094, g: 0.809101, b: 1, a: 1}
   Yellow: {r: 1, g: 0.9014313, b: 0.5235849, a: 1}
-  BulletHoles:
-  - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
-  - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
   Enemies:
   - {fileID: 5626777996755573803, guid: 1e909313c23a741fb8efd476af4b1347, type: 3}
   Obstacles:

@@ -29,11 +29,16 @@ public class TargetControllerEnemy : BaseTargetController
     
     protected override UniTask Initialize()
     {
+        if (isInitializing) return UniTask.CompletedTask;
+        isInitializing = true;
         if (isInitialized) return UniTask.CompletedTask;
+        if (!GameManager.Instance.GameStarted) return UniTask.CompletedTask;
         internalCountdown = Random.Range(ShootCountdownTimer/2, ShootCountdownTimer*2);
         PingPongAtStart();
         GameManager.Instance.Targets.Add(transform.parent.gameObject);
-        return base.Initialize();
+        isInitialized = true;
+        isInitializing = false;
+        return UniTask.CompletedTask;
     }
     
     protected override async UniTask<UniTask> ControllerUpdate()

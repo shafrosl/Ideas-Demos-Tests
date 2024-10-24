@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Cinemachine;
 using Cysharp.Threading.Tasks;
 using MyBox;
 using UnityEditor;
@@ -13,14 +12,12 @@ public class GameManager : MonoBehaviour
 
     [ConditionalField(nameof(UICamera), true), SerializeField] public Camera UICamera;
     [ConditionalField(nameof(GameCamera), true), SerializeField] public Camera GameCamera;
-    [ConditionalField(nameof(VirtualCamera), true), SerializeField] public CinemachineVirtualCamera VirtualCamera;
 
     [Header("Data")] 
     public GunObjectData GunData;
     public GemObjectData GemData;
     public PlayerStats PlayerStats;
     public List<Tuple<DraggableObjectReceiver, List<GemColorValue>>> GemsInGame = new();
-    public List<GameObject> Holes = new();
     public List<GameObject> Targets = new();
 
     [Header("Game Colors")] 
@@ -32,7 +29,6 @@ public class GameManager : MonoBehaviour
     public Color Yellow;
 
     [Header("Shared Assets")] 
-    public Sprite[] BulletHoles;
     public GameObject[] Enemies;
     public GameObject[] Obstacles;
 

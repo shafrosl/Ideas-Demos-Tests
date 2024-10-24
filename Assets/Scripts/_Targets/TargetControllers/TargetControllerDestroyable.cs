@@ -11,17 +11,24 @@ public class TargetControllerDestroyable : TargetControllerStatic
     public override void SpecialisedTask()
     {
         hitsAllowed--;
+        Debug.Log("hit! " + hitsAllowed);
         if (hitsAllowed <= 0) DestructObject();
     }
 
     protected override UniTask Initialize()
     {
+        if (isInitializing) return UniTask.CompletedTask;
+        isInitializing = true;
+        if (isInitialized) return UniTask.CompletedTask;
+        if (!GameManager.Instance.GameStarted) return UniTask.CompletedTask;
         hitsAllowed = HitsAllowed;
-        return base.Initialize();
+        isInitialized = true;
+        isInitializing = false;
+        return UniTask.CompletedTask;
     }
 
     private void DestructObject()
     {
-        
+        Debug.Log("DESTROYED!");
     }
 }

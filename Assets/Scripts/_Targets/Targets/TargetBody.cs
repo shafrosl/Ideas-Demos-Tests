@@ -10,12 +10,12 @@ public class TargetBody : BaseTarget
         if (tc.BodyShot && !tc.BodyShot.IsCounting) tc.BodyShot = null;
     }
 
-    public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
+    public override UniTask InstantiateHole(Vector3 worldPosition, SpriteRenderer SR, Vector3 offset)
     {
         if (TargetController is not TargetControllerEnemy tc) return UniTask.CompletedTask;
         if (!tc.BodyShot) tc.BodyShot = GameManager.Instance.PoolController.InstantiateHit(worldPosition);
         else tc.BodyShot.IncreaseSize();
-        return base.InstantiateHole(position, worldPosition, SR, offset);
+        return base.InstantiateHole(worldPosition, SR, offset);
     }
 
     public override void OnHit() => GameManager.Instance.PlayerStats.Score.BodyShots++;
