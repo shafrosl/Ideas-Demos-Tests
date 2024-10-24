@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Shared Assets")] 
     public Sprite[] BulletHoles;
-    public GameObject Sparks;
     public GameObject[] Enemies;
     public GameObject[] Obstacles;
 

@@ -28,4 +28,6 @@ public abstract class BaseTargetController : MonoBehaviour
         isInitialized = true;
         return UniTask.CompletedTask;
     }
+
+    public virtual void SpecialisedTask() { }
 }

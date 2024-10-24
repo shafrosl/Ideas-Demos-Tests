@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6257075746740723038}
   - component: {fileID: 2553485943653905328}
-  - component: {fileID: 2888993957512456003}
+  - component: {fileID: 8215129722125078843}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Untagged
@@ -61,7 +61,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!114 &2888993957512456003
+--- !u!114 &8215129722125078843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -70,11 +70,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8924767682134453671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3499ee636d3ae4adf9de702d17b87ba4, type: 3}
+  m_Script: {fileID: 11500000, guid: e690b8898a9354e738d1d9b6ea7ef338, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 2553485943653905328}
-  Collider: {fileID: 4762426410923130636}
+  HitsAllowed: 3
 --- !u!1 &9122611011577824817
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cd58efa0ea1e419db18d0bc8eed11d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetController: {fileID: 2888993957512456003}
+  TargetController: {fileID: 8215129722125078843}
 --- !u!1 &9176221915275124077
 GameObject:
   m_ObjectHideFlags: 0

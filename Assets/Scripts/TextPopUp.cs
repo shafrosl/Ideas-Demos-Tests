@@ -45,7 +45,7 @@ public class TextPopUp : MonoBehaviour
     {
         textPopUpCountdown = 1.25f;
         transform.DOShakePosition(0.1f, 0.25f, 3, 10);
-        transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+        transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
         await DOTween.To(() => TextRenderer.color, x => TextRenderer.color = x, GameManager.Instance.Red, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
         DOTween.To(() => TextRenderer.color, x => TextRenderer.color = x, new Color(0.01176471f, 0.01176471f, 0.01176471f), 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
     }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class TargetPickup : Target
+public class TargetPickup : BaseTarget
 {
     public override void OnHit()
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using Utility;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class WallTarget : Target
+public class TargetWall : BaseTarget
 {
     public override UniTask InstantiateHole(Vector3 position, Vector3 worldPosition, SpriteRenderer SR, Vector2 offset)
     {
@@ -24,7 +24,7 @@ public class WallTarget : Target
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount + SR.sortingOrder;
         GameManager.Instance.Holes.Add(holeObj);
-        var spark = Instantiate(GameManager.Instance.Sparks, holeObj.transform);
+        var spark = GameManager.Instance.PoolController.InstantiateSparks(holeObj.transform.position, holeObj.transform.rotation);
         if (spark.TryGetComponent(out ParticleSystemRenderer ps)) ps.sortingOrder = holeRenderer.sortingOrder + 1;
         return UniTask.CompletedTask;
     }

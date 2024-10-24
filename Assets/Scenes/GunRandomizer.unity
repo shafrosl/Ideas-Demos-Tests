@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 31664050}
   - component: {fileID: 31664051}
   m_Layer: 0
-  m_Name: Particle Pooling
+  m_Name: Pool Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,6 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TextPopUp: {fileID: 3290634921181273748, guid: e261902dd9a624f17aa952f48231733c, type: 3}
+  Spark: {fileID: 6084345840790899362, guid: 0b39d0c3de8ca41339e923b2908ebad9, type: 3}
 --- !u!1 &34096691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,7 +1390,6 @@ MonoBehaviour:
   BulletHoles:
   - {fileID: -1206062018, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
   - {fileID: -1897505686, guid: 6e029509f672c46c882a1f40385e970d, type: 3}
-  Sparks: {fileID: 6316045807292171089, guid: 824f2d858a01c49f58780675b38d7059, type: 3}
   Enemies:
   - {fileID: 5626777996755573803, guid: 1e909313c23a741fb8efd476af4b1347, type: 3}
   Obstacles:
@@ -9829,7 +9829,7 @@ GameObject:
   - component: {fileID: 761198207}
   - component: {fileID: 761198206}
   m_Layer: 0
-  m_Name: MapController
+  m_Name: Map Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

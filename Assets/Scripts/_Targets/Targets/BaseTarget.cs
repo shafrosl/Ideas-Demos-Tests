@@ -4,7 +4,7 @@ using UnityEngine;
 using Utility;
 using Random = UnityEngine.Random;
 
-public abstract class Target : MonoBehaviour, IBulletHole, IScore
+public abstract class BaseTarget : MonoBehaviour, IBulletHole, IScore
 {
     [ConditionalField(nameof(TargetController), true), SerializeField] public BaseTargetController TargetController;
     protected int holeCount;
@@ -28,7 +28,7 @@ public abstract class Target : MonoBehaviour, IBulletHole, IScore
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount + SR.sortingOrder;
         GameManager.Instance.Holes.Add(holeObj);
-        var spark = Instantiate(GameManager.Instance.Sparks, holeObj.transform);
+        var spark = GameManager.Instance.PoolController.InstantiateSparks(holeObj.transform.position, holeObj.transform.rotation);
         if (spark.TryGetComponent(out ParticleSystemRenderer ps))
         {
             spark.transform.localEulerAngles = TargetController.PositionDotValue < 0 ? new Vector3(0, 0, 0) : new Vector3(0, 180, 0);

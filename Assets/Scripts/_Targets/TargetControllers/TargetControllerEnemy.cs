@@ -6,7 +6,7 @@ using Utility;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(HingeJoint))]
-public class TargetController : BaseTargetController
+public class TargetControllerEnemy : BaseTargetController
 {
     public Transform BulletExit;
     public ParticleSystem MuzzleFlash;

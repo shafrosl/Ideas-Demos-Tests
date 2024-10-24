@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Utility;
 
-public class TargetStatic : Target
+public class TargetStatic : BaseTarget
 {
     public override UniTask InstantiateHole(Vector3 position, Vector3 normal, SpriteRenderer SR, Vector2 offset)
     {
@@ -24,7 +24,7 @@ public class TargetStatic : Target
         holeRenderer.sortingLayerName = "In Front";
         holeRenderer.sortingOrder = ++holeCount;
         GameManager.Instance.Holes.Add(holeObj);
-        var spark = Instantiate(GameManager.Instance.Sparks, holeObj.transform);
+        var spark = GameManager.Instance.PoolController.InstantiateSparks(holeObj.transform.position, holeObj.transform.rotation);
         if (spark.TryGetComponent(out ParticleSystemRenderer ps))
         {
             spark.transform.localEulerAngles = TargetController.PositionDotValue < 0 ? new Vector3(0, 0, 0) : new Vector3(0, 180, 0);
