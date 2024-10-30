@@ -1374,9 +1374,9 @@ MonoBehaviour:
   - {fileID: 5626777996755573803, guid: 1e909313c23a741fb8efd476af4b1347, type: 3}
   Obstacles:
   - {fileID: 8924767682134453671, guid: f88388e4a549548978153fc652e5588d, type: 3}
-  - {fileID: 1846386859642116875, guid: c0fa531f6e3f24156ba81fb6f93fda0d, type: 3}
-  - {fileID: 1661320761430812354, guid: 19f80c0b53f8d45849337e0470602a39, type: 3}
-  - {fileID: 4555141062236307798, guid: 92755d7d7385f4881a44c253721e71b6, type: 3}
+  - {fileID: 5363426934983987221, guid: f59b325e654d74ef6ac2217ed4a58176, type: 3}
+  - {fileID: 9021833140237025544, guid: b9e6a7414b82c4631a7819ab940e92ba, type: 3}
+  - {fileID: 6995565135802300235, guid: 3b55eaeb2be6441cdb8034a60d69c9dd, type: 3}
   GameMode: 0
   GameStarted: 0
   InGame: 0
@@ -1547,6 +1547,7 @@ MonoBehaviour:
   Cinemachine: {fileID: 782805180}
   RecoilImpulse: {fileID: 2140104509}
   HitImpulse: {fileID: 1618270329}
+  ExplosionImpulse: {fileID: 881924942}
   PlayerSpriteGroup: {fileID: 1932287810}
   LeftHand: {fileID: 1126494618}
   RightHand: {fileID: 1632395884}
@@ -10995,6 +10996,91 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865991696}
   m_CullTransparentMesh: 1
+--- !u!1 &881924940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 881924941}
+  - component: {fileID: 881924942}
+  m_Layer: 0
+  m_Name: Explosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &881924941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881924940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1520523930}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &881924942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881924940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 1
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &883971902
 GameObject:
   m_ObjectHideFlags: 0
@@ -15351,6 +15437,7 @@ Transform:
   m_Children:
   - {fileID: 2140104508}
   - {fileID: 1618270328}
+  - {fileID: 881924941}
   m_Father: {fileID: 209977812}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1543774310

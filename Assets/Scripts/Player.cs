@@ -15,6 +15,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     public CinemachineVirtualCamera Cinemachine;
     public CinemachineImpulseSource RecoilImpulse;
     public CinemachineImpulseSource HitImpulse;
+    public CinemachineImpulseSource ExplosionImpulse;
 
     [Header("Sprites")] 
     public Transform PlayerSpriteGroup;

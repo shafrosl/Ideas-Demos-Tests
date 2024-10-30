@@ -11,6 +11,7 @@ public abstract class BaseTargetController : MonoBehaviour
 
     protected bool isInitialized;
     protected bool isInitializing;
+    protected bool isPostInitialized;
     protected float internalCountdown;
     protected CancellationTokenSource ctx = new();
     
@@ -25,6 +26,7 @@ public abstract class BaseTargetController : MonoBehaviour
         else
         {
             await Initialize();
+            await PostInitialize();
         }
         return UniTask.CompletedTask;
     }
@@ -39,6 +41,8 @@ public abstract class BaseTargetController : MonoBehaviour
         isInitializing = false;
         return UniTask.CompletedTask;
     }
+    
+    public virtual UniTask PostInitialize() => UniTask.CompletedTask;
 
     public virtual void SpecialisedTask() { }
 }

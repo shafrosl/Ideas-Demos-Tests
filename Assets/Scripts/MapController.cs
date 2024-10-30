@@ -33,8 +33,7 @@ public class MapController : MonoBehaviour
             await GenerateTCMap();
         }
     }
-    
-    
+
     [ButtonMethod()]
     public UniTask GenerateTCMap()
     {
