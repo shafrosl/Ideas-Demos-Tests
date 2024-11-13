@@ -42,15 +42,16 @@ public class PoolController : MonoBehaviour
         return p;
     }
 
-    public GameObject InstantiateHole(SpriteRenderer SR, Vector3 position, Vector3 offset, int holeCount, out SpriteRenderer holeRenderer)
+    public GameObject InstantiateHole(SpriteRenderer SR, Vector3 position, Vector3 normal, int holeCount, out SpriteRenderer holeRenderer)
     {
         var randZ = Random.Range(0, 360);
         var holeObj = new GameObject("Hole")
         {
             transform =
             {
-                position = new Vector3(position.x - offset.x, position.y - offset.y, 0),
+                position = position + (normal * 0.01f),
                 localEulerAngles = new Vector3(0, 0, randZ),
+                localRotation = Quaternion.FromToRotation(Vector3.forward, normal),
                 localScale = Vector3.one,
                 parent = SR.transform,
             }
@@ -59,7 +60,7 @@ public class PoolController : MonoBehaviour
         holeRenderer = holeObj.AddComponent<SpriteRenderer>();
         holeRenderer.sprite = BulletHoles.RandomValue();
         holeRenderer.sortingLayerName = "In Front";
-        holeRenderer.sortingOrder = holeCount + SR.sortingOrder;
+        holeRenderer.sortingOrder = holeCount + SR.sortingOrder + 1;
         Holes.Add(holeObj);
         return holeObj;
     }
@@ -83,7 +84,7 @@ public class PoolController : MonoBehaviour
         holeRenderer = holeObj.AddComponent<SpriteRenderer>();
         holeRenderer.sprite = BulletHoles.RandomValue();
         holeRenderer.sortingLayerName = "In Front";
-        holeRenderer.sortingOrder = holeCount;
+        holeRenderer.sortingOrder = holeCount + 1;
         Holes.Add(holeObj);
         return holeObj;
     }

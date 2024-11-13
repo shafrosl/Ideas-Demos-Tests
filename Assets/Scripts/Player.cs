@@ -1,16 +1,18 @@
+using System;
 using System.Linq;
 using System.Threading;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MyBox;
+using PathCreation;
 using UnityEngine;
 using Utility;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform BulletExit;
-    public Transform CardinalRaycastPos;
     public Collider Collider;
     public ParticleSystem MuzzleFlash;
     public CinemachineVirtualCamera Cinemachine;
@@ -39,6 +41,8 @@ public class Player : MonoBehaviour, IMovement, IGun
     public float speedH = 2.0f;
     public float speedV = 2.0f;
     public float yaw, pitch;
+    public float movementSpeed;
+    public EndOfPathInstruction endOfPathInstruction;
 
     private float internalProtectionCooldownTimer;
     private int damage;
@@ -47,7 +51,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     private float recoilControl;
     private int numOfBulletsCurrent;
     private int numOfBulletsTotal;
-    private int movementPhase;
+    private float distanceTravelled;
 
     public Vector3 TargetPos;
 
@@ -57,6 +61,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     
     public void ResetState() => isHidden = isHiding = isShooting = isReloading = lockMovement = false;
     private void CheckMagazine() => isEmpty = numOfBulletsCurrent <= 0;
+    private void OnPathChanged() => distanceTravelled = GameManager.Instance.MapController.PathCreator.path.GetClosestDistanceAlongPath(transform.position);
 
     public async UniTask<UniTask> SetData(int hearts = 5)
     {
@@ -85,12 +90,22 @@ public class Player : MonoBehaviour, IMovement, IGun
         await GameManager.Instance.HUDController.ResetHearts(hearts);
         return UniTask.CompletedTask;
     }
-    
+
+    private void Start()
+    {
+        if (GameManager.Instance.MapController.PathCreator != null)
+        {
+            // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
+            GameManager.Instance.MapController.PathCreator.pathUpdated += OnPathChanged;
+        }
+    }
+
     private void Update()
     {
         if (lockMovement) return;
         Look();
         Hide();
+        Move();
         OnShoot();
         OnReload();
         OnHit();
@@ -149,19 +164,19 @@ public class Player : MonoBehaviour, IMovement, IGun
     }
 
     [ButtonMethod()]
-    public async void Move()
+    public void Move()
     {
-        if (isMoving) return;
         isMoving = true;
-        while (Cinemachine.transform.position != TargetPos)
+        var pc = GameManager.Instance.MapController.PathCreator;
+        if (pc != null)
         {
-            var dir = CheckCardinalRays(true);
-            await Cinemachine.transform.DOMove(transform.position + dir, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+            distanceTravelled += movementSpeed * Time.deltaTime;
+            Cinemachine.transform.position = pc.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
         }
         
-        isMoving = false;
+        if (distanceTravelled >= pc.path.length) isMoving = false;
     }
-
+    
     public void OnShoot()
     {
         if (Input.GetMouseButtonDown(0)) isShooting = true;
@@ -193,7 +208,8 @@ public class Player : MonoBehaviour, IMovement, IGun
                         if (!result.collider.transform.parent.TryGetComponent(out BaseTarget target)) continue;
                         if (result.collider.transform.parent.TryGetComponent<SpriteRenderer>(out var SR))
                         {
-                            target.InstantiateHole((result.point + Vector3.up), SR,target.transform.localPosition);
+                            
+                            target.InstantiateHole(result.point, SR, result.normal);
                         }
                         else
                         {
@@ -291,25 +307,6 @@ public class Player : MonoBehaviour, IMovement, IGun
     {
         await DOTween.To(() => RightHand.transform.localEulerAngles, x => RightHand.transform.localEulerAngles = x, new Vector3(0, 0, isEmpty ? 1f : 2f), 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
         await DOTween.To(() => RightHand.transform.localEulerAngles, x => RightHand.transform.localEulerAngles = x, Vector3.zero, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
-    }
-
-    private Vector3 CheckCardinalRays(bool debug = false)
-    {
-        var cardinalDirections = VectorExtensions.ForwardDirections3D;
-        var dist = 75;
-        foreach (var dir in cardinalDirections)
-        {
-            var hitInfo = RayExtensions.GetRaycastHit3D(CardinalRaycastPos.position, dir, dist);
-            if (hitInfo.collider is null)
-            {
-                if (debug) Debug.DrawRay(CardinalRaycastPos.position, dir * dist, Color.green);
-                return dir;
-            }
-                
-            if (debug) Debug.DrawRay(CardinalRaycastPos.position, dir * dist, Color.red);
-        }
-
-        return Vector3.zero;
     }
 
     private void OnDrawGizmos()

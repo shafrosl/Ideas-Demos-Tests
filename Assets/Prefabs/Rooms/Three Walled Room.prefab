@@ -645,12 +645,12 @@ MonoBehaviour:
   - {fileID: 6372730811538275140}
   - {fileID: 485192988503584059}
   - {fileID: 6798653842760820899}
-  PathPoints:
-  - {fileID: 1182563149507039297}
-  - {fileID: 641689012624933863}
   xPos: 0
   zPos: 0
   RoomDirection: 0
+  PathPoints:
+  - {fileID: 1182563149507039297}
+  - {fileID: 641689012624933863}
 --- !u!1 &7659016508138930785
 GameObject:
   m_ObjectHideFlags: 0

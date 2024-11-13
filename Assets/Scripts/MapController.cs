@@ -265,7 +265,7 @@ public class MapController : MonoBehaviour
             }
         }
 
-        PathCreator.bezierPath = new BezierPath(paths, false, PathSpace.xz);
+        PathCreator.bezierPath = new BezierPath(paths, false, PathSpace.xyz);
         return UniTask.CompletedTask;
     }
 

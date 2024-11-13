@@ -4,7 +4,6 @@ using MyBox;
 using UnityEngine;
 using UnityEngine.UI;
 using Utility;
-using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "GunData", menuName = "ItemObjectData/GunData", order = 1)]
@@ -23,17 +22,17 @@ public class GunObjectData : ItemObjectData
         {
             foreach (var g in Bodies)
             {
-                Debug.Log(g.Name + " updating from type " + g.GunPart + " with ID " + g.ID + "...");
+                DebugExtensions.Log(g.Name + " updating from type " + g.GunPart + " with ID " + g.ID + "...");
 
                 foreach (var gun in Bodies)
                 {
                     if (gun.Name != g.Name) continue;
                     if (g.ID == gun.ID) continue;
-                    Debug.Log(g.Name + " name already taken. ID: " + g.ID);
+                    DebugExtensions.Log(g.Name + " name already taken. ID: " + g.ID);
                     return;
                 }
 
-                Debug.Log(g.Name + " updated with type " + g.GunPart + " with ID " + g.ID);
+                DebugExtensions.Log(g.Name + " updated with type " + g.GunPart + " with ID " + g.ID);
             }
         }
         
@@ -41,17 +40,17 @@ public class GunObjectData : ItemObjectData
         {
             foreach (var g in Barrels)
             {
-                Debug.Log(g.Name + " updating from type " + g.GunPart + " with ID " + g.ID + "...");
+                DebugExtensions.Log(g.Name + " updating from type " + g.GunPart + " with ID " + g.ID + "...");
 
                 foreach (var gun in Barrels)
                 {
                     if (gun.Name != g.Name) continue;
                     if (g.ID == gun.ID) continue;
-                    Debug.Log(g.Name + " name already taken. ID: " + g.ID);
+                    DebugExtensions.Log(g.Name + " name already taken. ID: " + g.ID);
                     return;
                 }
 
-                Debug.Log(g.Name + " updated with type " + g.GunPart + " with ID " + g.ID);
+                DebugExtensions.Log(g.Name + " updated with type " + g.GunPart + " with ID " + g.ID);
             }
         }
         
@@ -59,17 +58,17 @@ public class GunObjectData : ItemObjectData
         {
             foreach (var g in Stocks)
             {
-                Debug.Log(g.Name + " updating from type " + g.GunPart + " with ID " + g.ID + "...");
+                DebugExtensions.Log(g.Name + " updating from type " + g.GunPart + " with ID " + g.ID + "...");
 
                 foreach (var gun in Stocks)
                 {
                     if (gun.Name != g.Name) continue;
                     if (g.ID == gun.ID) continue;
-                    Debug.Log(g.Name + " name already taken. ID: " + g.ID);
+                    DebugExtensions.Log(g.Name + " name already taken. ID: " + g.ID);
                     return;
                 }
 
-                Debug.Log(g.Name + " updated with type " + g.GunPart + " with ID " + g.ID);
+                DebugExtensions.Log(g.Name + " updated with type " + g.GunPart + " with ID " + g.ID);
             }
         }
         
