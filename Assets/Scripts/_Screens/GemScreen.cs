@@ -29,7 +29,8 @@ public class GemScreen : BaseScreen
                 transform =
                 {
                     parent = GameManager.Instance.GunSelectController.Canvas.transform,
-                    position = slot.transform.position
+                    position = slot.transform.position,
+                    localScale = new Vector3(1.65f, 1.65f, 1.65f)
                 }
             };
 
@@ -45,7 +46,8 @@ public class GemScreen : BaseScreen
                     transform =
                     {
                         parent = gObj.transform,
-                        localPosition = Vector3.zero
+                        localPosition = Vector3.zero,
+                        localScale = Vector3.one
                     }
                 };
 
@@ -59,7 +61,8 @@ public class GemScreen : BaseScreen
                 transform =
                 {
                     parent = gObj.transform,
-                    localPosition = Vector3.zero
+                    localPosition = Vector3.zero,
+                    localScale = Vector3.one
                 }
             };
             

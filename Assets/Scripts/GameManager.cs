@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     public GameMode GameMode = GameMode.NotSelected;
     public bool GameStarted;
     public bool InGame;
+    public bool NoDamage;
 
     [ConditionalField(nameof(GunSelectController), true), SerializeField] public GunSelectController GunSelectController;
     [ConditionalField(nameof(SettingsController), true), SerializeField] public SettingsController SettingsController;

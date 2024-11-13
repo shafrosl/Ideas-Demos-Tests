@@ -10,6 +10,7 @@ using Utility;
 public class Player : MonoBehaviour, IMovement, IGun
 {
     public Transform BulletExit;
+    public Transform CardinalRaycastPos;
     public Collider Collider;
     public ParticleSystem MuzzleFlash;
     public CinemachineVirtualCamera Cinemachine;
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour, IMovement, IGun
     public SpriteRenderer[] DeathOverlay;
 
     [Header("Player State")] 
+    public bool isMoving;
     public bool isHidden;
     public bool isHiding;
     public bool isShooting;
@@ -46,7 +48,8 @@ public class Player : MonoBehaviour, IMovement, IGun
     private int numOfBulletsCurrent;
     private int numOfBulletsTotal;
     private int movementPhase;
-    
+
+    public Vector3 TargetPos;
 
     public int Damage => damage;
     
@@ -143,6 +146,20 @@ public class Player : MonoBehaviour, IMovement, IGun
             await PlayerSpriteGroup.DOLocalMoveY(0, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
             isHiding = false;
         }
+    }
+
+    [ButtonMethod()]
+    public async void Move()
+    {
+        if (isMoving) return;
+        isMoving = true;
+        while (Cinemachine.transform.position != TargetPos)
+        {
+            var dir = CheckCardinalRays(true);
+            await Cinemachine.transform.DOMove(transform.position + dir, 0.5f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+        }
+        
+        isMoving = false;
     }
 
     public void OnShoot()
@@ -242,11 +259,6 @@ public class Player : MonoBehaviour, IMovement, IGun
         }
     }
 
-    public async void MovePlayer()
-    {
-        
-    }
-
     private UniTask ResetOverlay()
     {
         foreach (var overlay in DeathOverlay)
@@ -279,6 +291,25 @@ public class Player : MonoBehaviour, IMovement, IGun
     {
         await DOTween.To(() => RightHand.transform.localEulerAngles, x => RightHand.transform.localEulerAngles = x, new Vector3(0, 0, isEmpty ? 1f : 2f), 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
         await DOTween.To(() => RightHand.transform.localEulerAngles, x => RightHand.transform.localEulerAngles = x, Vector3.zero, 0.1f).WithCancellation(ctx.Token).SuppressCancellationThrow();
+    }
+
+    private Vector3 CheckCardinalRays(bool debug = false)
+    {
+        var cardinalDirections = VectorExtensions.ForwardDirections3D;
+        var dist = 75;
+        foreach (var dir in cardinalDirections)
+        {
+            var hitInfo = RayExtensions.GetRaycastHit3D(CardinalRaycastPos.position, dir, dist);
+            if (hitInfo.collider is null)
+            {
+                if (debug) Debug.DrawRay(CardinalRaycastPos.position, dir * dist, Color.green);
+                return dir;
+            }
+                
+            if (debug) Debug.DrawRay(CardinalRaycastPos.position, dir * dist, Color.red);
+        }
+
+        return Vector3.zero;
     }
 
     private void OnDrawGizmos()

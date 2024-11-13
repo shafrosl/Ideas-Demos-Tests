@@ -338,7 +338,7 @@ namespace Utility
             return new Vector2(randX, randY);
         }
         
-        public static List<Vector2> EightDirections = new()
+        public static readonly List<Vector2> EightDirections2D = new()
         {
             new Vector2(0,1).normalized,
             new Vector2(1,1).normalized,
@@ -348,6 +348,27 @@ namespace Utility
             new Vector2(-1,-1).normalized,
             new Vector2(-1,0).normalized,
             new Vector2(-1,1).normalized
+        };
+        
+        public static readonly List<Vector3> EightDirections3D = new()
+        {
+            new Vector3(0, 0, 1).normalized,
+            new Vector3(1, 0, 1).normalized,
+            new Vector3(1, 0,0).normalized,
+            new Vector3(1, 0,-1).normalized,
+            new Vector3(0, 0,-1).normalized,
+            new Vector3(-1, 0,-1).normalized,
+            new Vector3(-1, 0,0).normalized,
+            new Vector3(-1, 0,1).normalized
+        };
+        
+        public static readonly List<Vector3> ForwardDirections3D = new()
+        {
+            new Vector3(0, 0, 1).normalized,
+            new Vector3(1, 0, 1).normalized,
+            new Vector3(-1, 0,1).normalized,
+            new Vector3(1, 0,0).normalized,
+            new Vector3(-1, 0,0).normalized
         };
     }
 
@@ -365,21 +386,32 @@ namespace Utility
     public static class RayExtensions
     {
         private static RaycastHit[] results = new RaycastHit[16];
+        private static Collider[] colliderResult = new Collider[16];
         public static RaycastHit[] GetRaycastHits3D(Vector3 origin, Vector3 direction, out int size)
         {
             var ray = new Ray(origin, direction);
-            Debug.DrawRay(origin, direction, Color.magenta, 30);
             Clear(results, 0, results.Length);
             size = Physics.RaycastNonAlloc(ray, results);
             Sort(results, (a, b) => (a.distance.CompareTo(b.distance)));
             return results;
         }
 
+        public static Collider[] GetOverlapBox3D(Vector3 center, Vector3 halfExtents, out int size)
+        {
+            size = Physics.OverlapBoxNonAlloc(center, halfExtents, colliderResult);
+            return colliderResult;
+        } 
+
         public static RaycastHit GetRaycastHit3D(Vector3 origin, Vector3 direction)
         {
             var ray = new Ray(origin, direction);
             Physics.Raycast(ray, out var hit);
-            Debug.DrawRay(origin, hit.point - origin, Color.magenta, 10);
+            return hit;
+        }
+        
+        public static RaycastHit GetRaycastHit3D(Vector3 origin, Vector3 direction, float distance)
+        {
+            Physics.Raycast(origin, direction, out var hit, distance);
             return hit;
         }
     }
@@ -463,11 +495,11 @@ namespace Utility
             #endif 
         }
         
-        public static void DrawLine(Vector3 from, Vector3 direction, float distance, Color color, bool transparent = false)
+        public static void DrawLine(Vector3 from, Vector3 to, float distance, Color color, bool transparent = false)
         {
             #if UNITY_EDITOR
             Gizmos.color = transparent ? color.Modify(a:0.2f) : color;
-            Gizmos.DrawLine(from, direction * distance);
+            Gizmos.DrawLine(from, to * distance);
             #endif 
         }
     }

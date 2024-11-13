@@ -40,6 +40,7 @@ public class PlayerStats
 
     public bool Damage()
     {
+        if (GameManager.Instance.NoDamage) return false;
         if (Health < 1) return false;
         Health -= 1;
         return Health != 0;

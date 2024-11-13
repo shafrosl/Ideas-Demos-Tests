@@ -11,6 +11,10 @@ public class TargetControllerRoom : TargetControllerStatic
     public RoomType RoomType;
     public int TargetFacing;
     public Transform[] EnemyPos, ObstaclePos;
+    public float xPos, zPos;
+    public Direction RoomDirection;
+    
+    [SerializeReference] private Transform[] PathPoints;
 
     public TargetControllerRoom GetNextRoom(List<TargetControllerRoom> rooms, Direction currDir, out Direction newDir)
     {
@@ -57,7 +61,7 @@ public class TargetControllerRoom : TargetControllerStatic
             newDir = returnRoom.Directions[0];
         }
 
-        returnRoom.SetRoomRotation(currDir);
+        returnRoom.SetRoomRotation(currDir, newDir);
         return returnRoom;
     }
 
@@ -85,8 +89,9 @@ public class TargetControllerRoom : TargetControllerStatic
         }
     }
 
-    private void SetRoomRotation(Direction currDir)
+    private void SetRoomRotation(Direction currDir, Direction newDir)
     {
+        RoomDirection = newDir;
         switch (currDir)
         {
             case Direction.Up:
@@ -102,5 +107,25 @@ public class TargetControllerRoom : TargetControllerStatic
                 TargetFacing = 0;
                 break;
         }
+    }
+
+    public Transform[] GetSortedPathPoints(Transform lastPoint)
+    {
+        if (lastPoint is null) return PathPoints;
+        List<Transform> sortedList = new();
+        Dictionary<Transform, float> unsortedDict = new();
+        foreach (var pt in PathPoints)
+        {
+            var dist = Vector3.Distance(lastPoint.position, pt.position);
+            unsortedDict.Add(pt, dist);
+        }
+        
+        var sortedDict = from entry in unsortedDict orderby entry.Value ascending select entry;
+        foreach (var d in sortedDict)
+        {
+            sortedList.Add(d.Key);
+        }
+
+        return sortedList.ToArray();
     }
 }

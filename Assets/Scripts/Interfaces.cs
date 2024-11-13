@@ -5,6 +5,7 @@ public interface IMovement
 {
     public void Look();
     public void Hide();
+    public void Move();
 }
 
 public interface IGun
